@@ -1,0 +1,4 @@
+*.log
+shogun_tutorial.pdf
+*.synctex.gz
+*.aux
