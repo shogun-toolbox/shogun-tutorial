@@ -1,9 +1,18 @@
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.3
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+% A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+%
+% Written (C) 2012 Heiko Strathmann
+% Written (C) 2012 Sergey Lisitsyn
+
 \ProcessOptions \relax
-\LoadClass{article}
+\LoadClass{book}
 \ProvidesPackage{shogun_tutorial}
 
 \RequirePackage[a4paper,left=1.5cm,right=1cm,top=2.3cm,bottom=2cm]{geometry}
-\RequirePackage{pxfonts}
 \RequirePackage[T1]{fontenc}
 \RequirePackage{lastpage}
 
@@ -21,3 +30,14 @@
 	\renewcommand{\footrulewidth}{1pt}
 }
 \pagestyle{followingpage}
+
+\RequirePackage[utf8]{inputenc}
+\RequirePackage{hyperref}
+\RequirePackage{amssymb}
+\RequirePackage{amsmath}
+\RequirePackage{psfrag}
+\RequirePackage{graphicx}
+\RequirePackage{subfig}
+\RequirePackage{todonotes}
+\RequirePackage[toc,page]{appendix}
+\RequirePackage[square]{natbib}
