@@ -7,20 +7,35 @@
 %
 % Written (C) 2012 Heiko Strathmann
 
-\chapter{Statistical Hypothesis Testing}
+\chapter{Statistical Testing}
+This chapter describes SHOGUN's framework for statistical hypothesis testing. We begin by giving a brief outline of the problem setting in section \ref{sec:hypothesis_testing_into}. Then, we describe methods for two-sample testing for independence testing in section.
+
+Methods for two-sample testing currently consist of tests based on the \emph{Maximum Mean Discrepancy}, section \ref{sec:mmd_into}. There are two types of tests available, a quadratic time test, which is described in section \ref{sec:mmd_quadratic}; and a linear time test, which is described in section \ref{sec:mmd_linear}. Both come in various flavours.
+
+Independence testing is currently based in the \emph{Hilbert Schmidt Independence Criterion}, which is described in section \ref{sec:independence_testing_into} along with a test using it, which is described in section \ref{sec:hsic_test}
+
+\section{Statistical Hypothesis Testing}
+\label{sec:hypothesis_testing_into}
+
+To set the context, we here briefly describe statistical hypothesis testing.
 
 \section{Two-Sample-Testing with the Maximum Mean Discrepancy}
+\label{sec:mmd_into}
 
 \subsection{Quadratic Time MMD Statistic}
+\label{sec:mmd_quadratic}
 
 \subsubsection{Spectrum Approximation}
 \subsubsection{Gamma Approximation}
 \subsubsection{Bootstrapping}
 
 \subsection{Linear Time MMD Statistic}
+\label{sec:mmd_linear}
 \subsubsection{Gaussian Approximation}
 \subsubsection{Bootstrapping}
 
 \section{Independence Testing with the Hilbert-Schmidt Independence Criterion}
+\label{sec:independence_testing_into}
 
 \subsection{HSIC Statistic}
+\label{sec:hsic_test}
