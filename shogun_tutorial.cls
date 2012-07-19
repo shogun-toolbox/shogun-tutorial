@@ -41,3 +41,5 @@
 \RequirePackage{todonotes}
 \RequirePackage[toc,page]{appendix}
 \RequirePackage[square]{natbib}
+\RequirePackage{algorithmic,algorithm}
+\numberwithin{algorithm}{chapter}
