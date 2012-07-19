@@ -17,17 +17,97 @@ Independence testing is currently based in the \emph{Hilbert Schmidt Independenc
 \section{Statistical Hypothesis Testing}
 \label{sec:hypothesis_testing_into}
 
-To set the context, we here briefly describe statistical hypothesis testing.
+To set the context, we here briefly describe statistical hypothesis testing. Informally, one defines a hypothesis on a certain domain and then uses a statistical test to check whether this hypothesis is true. Formally, the goal is to reject a so-called \emph{null-hypothesis} $H_0$, which is the complement of an \emph{alternative-hypothesis} $H_A$. 
+
+To distinguish the hypothesises, a test statistic is computed on sample data. Since sample data is finite, this corresponds to sampling the true distribution of the test statistic. There are two different distributions of the test statistic -- one for each hypothesis. The \emph{null-distribution} corresponds to test statistic samples under the model that $H_0$ holds; the \emph{alternative-distribution} corresponds to test statistic samples under the model that $H_A$ holds.
+
+In practice, one tries to compute the quantile of the test statistic in the null-distribution. In case the test statistic is in a high quantile, i.e.\ it is unlikely that the null-distribution has generated the test statistic -- the null-hypothesis $H_0$ is rejected.
+
+There are two different kinds of errors in hypothesis testing:
+\begin{itemize}
+\item A \emph{type I error} is made when $H_0: p=q$ is wrongly rejected. That is, the tests says that the samples are from different distributions when they are not.
+\item A \emph{type II error} is made when $H_A: p=q$ is wrongly accepted. That is, the tests says that the samples are from same distributions when they are from the same.
+\end{itemize}
+A so called \emph{consistent} test achieves zero type 2 error for a fixed type 1 error.
+
+To decide whether to reject $H_0$, one could set a threshold, say at the 95\% quantile of the null-distribution, and reject $H_0$ when the test statistic lies below that threshold. This means that the chance that the samples were generated under $H_0$ are 5\%. We call this number the test power $\alpha$ (in this case $\alpha=0.05$). It is an upper bound on the probability for a type 1 error. An alternative way is simply to compute the quantile of the test statistic in the null-distribution, the so-called \emph{p-value}, and to compare the p-value against a desired test power, say $\alpha=0.05$, by hand. The advantage of the second method is that one not only gets a binary answer, but also an upper bound on the type 1 error.
+
+In order to construct a two-sample test, the null-distribution of the test statistic has to be approximated. One way of doing this for any two-sample test is called \emph{bootstrapping}:
+\begin{algorithm}
+Inputs are:
+\begin{itemize}
+ \item $X,Y$, sets of samples from $p,q$ of size $m,n$ respectively
+\end{itemize}
+Output is:
+\begin{itemize}
+ \item One sample from null-distribution. Simply repeat for more samples.
+\end{itemize}
+
+ \begin{algorithmic}[1]
+\STATE{$Z \gets \{X,Y\}$}
+\STATE{$\hat{Z}=\{\hat{z}_1,...,\hat{z}_{m+n}\}\gets \text{randperm}(Z)$} \qquad (generate a random ordering)
+\STATE{$\hat{X}\gets \{\hat{z}_1,...\hat{z}_m\}$}
+\STATE{$\hat{Y}\gets \{\hat{z}_{m+1},...\hat{z}_{m+n}\}$}
+\RETURN{Test statistic for $\hat{X},\hat{Y}$}
+\end{algorithmic}
+\caption{Bootstrapping a null-distribution.}
+\label{alg:bootstrapping}
+\end{algorithm}
+
+Bootstrapping is a useful technique to create ground-truth samples for a null-distribution. However, it is rather costly because the statistic has to be re-computed for every sample. SHOGUN has a bootstrapping implementation for any two-sample test in \todo{reference to implementation}.
+
+
+An important class of hypothesis tests are the \emph{two-sample-tests}, which will be defined in the following.
 
 \section{Two-Sample-Testing with the Maximum Mean Discrepancy}
 \label{sec:mmd_into}
+In two-sample testing, one tries to find out whether to sets of samples come from different distributions. Given two probability distributions $p,q$ and i.i.d.\ samples $X=\{x_i\}_{i=1}^m\subseteq \mathbb{R}^d\sim p$ and $Y=\{y_i\}_{i=1}^n\subseteq \mathbb{R}^d\sim p$, the two sample test distinguishes the hypothesises
+\begin{align*}
+H_0: p=q\\
+H_A: p\neq q
+\end{align*}
+
+In order to solve this problem, it is desirable to have a criterion than takes a positive unique value if $p\neq q$, and zero if and only if $p=q$. The so called \emph{Maximum Mean Discrepancy} (MMD), has this property and allows to distinguish any two probability distributions, if used in a \emph{reproducing kernel Hilbert space} (RKHS). It is the distance of the mean embeddings $\mu_p, \mu_q$ of the distributions $p,q$ in such a RKHS $\mathcal{F}$.
+\begin{align}
+\label{eqn:mmd_population}
+\mmd[\mathcal{F},p,q]:=||\mu_p-\mu_q||_\mathcal{F}^2
+\end{align}
+See \citep[Section 2]{Gretton2012} for details. We here only describe how to use the MMD for two-sample testing. SHOGUN offers two types of test statistic based on the MMD, one with quadratic costs both in time and space, and on with linear time and constant space costs. Both come in different versions and with different methods how to approximate the null-distribution in order to construct a two-sample test.
 
 \subsection{Quadratic Time MMD Statistic}
 \label{sec:mmd_quadratic}
+We now describe the quadratic time MMD, as described in \citep[Lemma 6]{Gretton2012}, which is implemented in SHOGUN. All methods in this section are implemented in the class \todo{reference to implementation}.
+
+An unbiased estimate for expression \ref{eqn:mmd_population} is given by
+\begin{align*}
+\mmd_u^2[\mathcal{F},X,Y]=&\frac{1}{m(m-1)}\sum_{i=1}^m\sum_{j\neq i}^mk(x_i,x_j) + \frac{1}{n(n-1)}\sum_{i=1}^n\sum_{j\neq i}^nk(y_i,y_j)\\
+&-\frac{2}{mn}\sum_{i=1}^m\sum_{j\neq i}^nk(x_i,y_j)
+\end{align*}
+
+A biased estimate would be
+\begin{align*}
+\mmd_b^2[\mathcal{F},X,Y]=&\frac{1}{m^2}\sum_{i=1}^m\sum_{j=1}^mk(x_i,x_j) + \frac{1}{n^ 2}\sum_{i=1}^n\sum_{j=1}^nk(y_i,y_j)\\
+&-\frac{2}{mn}\sum_{i=1}^m\sum_{j\neq i}^nk(x_i,y_j)
+\end{align*}
+
+To decide which statistic to use, use \todo{reference to implementation}. Note that some methods for approximating the null-distribution only work with one of both types.
+
+\subsubsection{Bootstrapping}
+As for any two-sample test in SHOGUN, bootstrapping can be used with both types of quadratic MMD statistic. Results in a consistent, but slow test. Note that for each sample, the quadratic time estimate has to be re-computed. The number of samples to take is the only parameter. As a rule of thumb, use at least 250 samples.
 
 \subsubsection{Spectrum Approximation}
+Approximates the null-distribution using the Eigen-Spectrum of the kernel matrix of the joint samples. Was described in \citep{Gretton2012b}. This is a fast and consistent test. Effectively, the null-distribution is sampled, but in a more efficient way than the bootstrapping approach.
+\todo{math details}
+
+There are two parameters:
+\begin{itemize}
+\item Number of samples from null-distribution. The more, the more accurate. As a rule of thumb, use 250.
+\item Number of Eigenvalues of the Eigen-decomposition of the kernel matrix to use. The more the better the results get. As a rule of thumb, use at least \todo{rule of thumb}.
+\end{itemize}
+
+In SHOGUN, use \todo{reference to implementation}. If the kernel matrices are diagonal dominant, this method is likely to fail. For more details, see the original paper.
 \subsubsection{Gamma Approximation}
-\subsubsection{Bootstrapping}
+
 
 \subsection{Linear Time MMD Statistic}
 \label{sec:mmd_linear}
