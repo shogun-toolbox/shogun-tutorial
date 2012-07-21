@@ -14,6 +14,7 @@
 
 \RequirePackage[a4paper]{geometry}
 \RequirePackage[T1]{fontenc}
+\RequirePackage[sc]{mathpazo}
 \RequirePackage{lastpage}
 
 \RequirePackage{fancyhdr}
