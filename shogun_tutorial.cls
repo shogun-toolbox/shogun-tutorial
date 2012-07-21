@@ -43,3 +43,5 @@
 \RequirePackage[square]{natbib}
 \RequirePackage{algorithmic,algorithm}
 \numberwithin{algorithm}{chapter}
+
+\newcommand{\shogunclass}[1]{\href{http://www.shogun-toolbox.org/doc/en/current/classshogun_1_1#1.html}{\texttt{shogun::#1}}}
