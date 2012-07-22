@@ -1,0 +1,92 @@
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.3
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+% A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+%
+% Written (C) 2012 Sergey Lisitsyn 
+
+\chapter{Multitask learning}
+
+In this chapter we describe multitask learning algorithms available in the SHOGUN toolbox. 
+In the toolbox we include some multitask learning algorithms ported from two packages: SLEP 
+(the Sparse LEarning Package) and the MALSAR (Multi-tAsk Learning via StructurAl 
+Regularization) package.
+
+\section{$L_1/L_q$-norm regularized multitask learning}
+
+One of the simplest approaches to learn linear classification and regression models is to
+use regularization based on $L_1/L_q$ norm of the common $w$ hyperparameter
+$$
+\| w \|_{1/q}
+$$ 
+That kind of regularization in the same time pulls corresponding weights 
+of hyperparameters $w_t$ to be similar and pulls non-relevant feature weights
+to be zero.
+
+\subsection{Least squares linear regression}
+
+The algorithm learns a multitask linear least squares regression model of regression 
+$$
+f_t(x) = \langle w_t,x \rangle + b_t, ~~ t = 1, \dots, T,
+$$
+where $T$ is a number of tasks, from the solution of the following optimization problem:
+$$
+\min_w \sum_{t=1}^{T} \sum_{i \in G_t} \left(\langle w_t,x_i \rangle + b_t - y_i\right)^2
++ \lambda \| w \|_{1/q},
+$$
+where $G = \{ G_1, \dots, G_T \}$ is a set of tasks' non-overlapping indices, $\forall_i x_i$ are feature 
+vectors and $\forall_i y_i \in \mathbb{R}$ are labels.
+
+\subsection{Logistic regression}
+
+The algorithm learns a multitask linear logistic model of classification 
+$$
+f_t(x) = sign (\langle w_t,x \rangle + b_t), ~~ t = 1, \dots, T,
+$$
+where $T$ is a number of tasks, from the solution of the following optimization problem:
+$$
+\min_w \sum_{t=1}^{T} \sum_{i \in G_t} \frac{1}{|G_t|} \log (1+\exp\left(-y_i(\langle w_t,x_i \rangle + b_t)\right)
++ \lambda \| w \|_{1/q},
+$$
+where $G = \{ G_1, \dots, G_T \}$ is a set of tasks' non-overlapping indices, $\forall_i x_i$ are feature 
+vectors and $\forall_i y_i \in \{-1,1\}$ are labels.
+
+\section{Tree structured group lasso multitask learning}
+
+In some cases relations between tasks can be described via tree. 
+
+\subsection{Least squares linear regression}
+
+The algorithm learns a multitask linear least squares regression model of regression 
+$$
+f_t(x) = \langle w_t,x \rangle + b_t, ~~ t = 1, \dots, T,
+$$
+where $T$ is a number of tasks, from the solution of the following optimization problem:
+$$
+\min_w \sum_{t=1}^{T} \sum_{i \in G_t} \left(\langle w_t,x_i \rangle + b_t - y_i\right)^2
++ \lambda \| w \|_{1/q},
+$$
+where $G = \{ G_0, \dots, G_T \}$ is a set of tasks' tree indices, $\forall_i x_i$ are feature 
+vectors and $\forall_i y_i \in \mathbb{R}$ are labels.
+
+\subsection{Logistic regression}
+
+The algorithm learns a multitask linear logistic model of classification 
+$$
+f_t(x) = sign (\langle w_t,x \rangle + b_t), ~~ t = 1, \dots, T,
+$$
+where $T$ is a number of tasks, from the solution of the following optimization problem:
+$$
+\min_{w,c} \sum_{t=1}^{T} \sum_{i \in G_t} \frac{1}{|G_t|} \log (1+\exp\left(-y_i(\langle w_t,x_i \rangle + b_t)\right)
++ \lambda \| w \|_{1/q},
+$$
+where $G = \{ G_0, \dots, G_T \}$ is a set of tasks' tree indices, $\forall_i x_i$ are feature 
+vectors and $\forall_i y_i \in \{-1,1\}$ are labels.
+
+\section{Joint Feature Learning}
+
+\section{Low rank}
+
+\section{Clustered learning}
