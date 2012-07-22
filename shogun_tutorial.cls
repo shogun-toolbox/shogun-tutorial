@@ -45,4 +45,4 @@
 \RequirePackage{algorithmic,algorithm}
 \numberwithin{algorithm}{chapter}
 
-\newcommand{\shogunclass}[1]{\href{http://www.shogun-toolbox.org/doc/en/current/classshogun_1_1#1.html}{\texttt{shogun::#1}}}
+\newcommand{\shogunclass}[1]{\href{http://www.shogun-toolbox.org/doc/en/latest/classshogun_1_1#1.html}{\texttt{#1}}}
