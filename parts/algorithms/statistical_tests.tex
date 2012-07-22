@@ -54,8 +54,15 @@ Output is:
 \label{alg:bootstrapping}
 \end{algorithm}
 
-Bootstrapping is a useful technique to create ground-truth samples for a null-distribution. However, it is rather costly because the statistic has to be re-computed for every sample. SHOGUN has a bootstrapping implementation, \texttt{bootstrap\_null()}, for any two-sample test in \shogunclass{CTwoSampleTestStatistic}, and for any independence test in \shogunclass{CIndependenceTestStatistic}.
+Bootstrapping is a useful technique to create ground-truth samples for a null-distribution. However, it is rather costly because the statistic has to be re-computed for every sample. \shogunclass{CIndependenceTestStatistic}.
 
+SHOGUN implements statistical testing in the abstract class \shogunclass{CTestStatistic}.
+\begin{itemize}
+\item Test statistics can be computed with \texttt{compute\_statistic()}.
+\item P-values for a given statistic can be computed via \texttt{compute\_p\_value()}. Results depend on method that is set for approximating null-distribution.
+\item Statistic thresholds for a given p-value can be computed via \texttt{compute\_threshold()}. Results depend on method that is set for approximating null-distribution.
+\item A number of samples can be drawn from the null-distribution using bootstrapping via \texttt{bootstrap\_null()}.
+\end{itemize}
 
 An important class of hypothesis tests are the \emph{two-sample-tests}, which will be defined in the following.
 
@@ -93,7 +100,7 @@ A biased estimate would be
 &-\frac{2}{mn}\sum_{i=1}^m\sum_{j\neq i}^nk(x_i,y_j)
 \end{align*}
 
-To decide which statistic to use, use \texttt{set\_statistic\_type()} with arguments \texttt{BIASED} or \texttt{UNBIASED} to activate this statistic type. Note that some methods for approximating the null-distribution only work with one of both types. Both statistics' computational costs are quadratic both in time and space.
+To compute statistic, use \texttt{compute\_statistic()}. To decide which statistic to use, use \texttt{set\_statistic\_type()} with arguments \texttt{BIASED} or \texttt{UNBIASED} to activate this statistic type. Note that some methods for approximating the null-distribution only work with one of both types. Both statistics' computational costs are quadratic both in time and space.
 
 \subsubsection{Bootstrapping}
 As for any two-sample test in SHOGUN, bootstrapping can be used to approximate the null-distribution with both types of quadratic MMD statistic. This results in a consistent, but slow test. Note that for each sample, the quadratic time estimate has to be re-computed. The number of samples to take is the only parameter. As a rule of thumb, use at least 250 samples.
@@ -141,7 +148,7 @@ An fast, unbiased estimate for expression \ref{eqn:mmd_population} which still u
 \mmd_l^2[\mathcal{F},X,Y]=\frac{1}{m_2}\sum_{i=1}^{m_2} k(x_{2i},x_{2i+1})+k(y_{2i},y_{2i+1})-k(x_{2i},y_{2i+1})-
   k(x_{2i+1},y_{2i})
 \end{align*}
-where $ m_2=\lfloor\frac{m}{2} \rfloor$. This statistic is interesting for large scale tests since its computational costs are linear in the number of samples; and the space costs are constant -- it is therefore very suitable for large amounts of streaming data.
+where $ m_2=\lfloor\frac{m}{2} \rfloor$. This statistic is interesting for large scale tests since its computational costs are linear in the number of samples; and the space costs are constant -- it is therefore very suitable for large amounts of streaming data. To compute statistic, use \texttt{compute\_statistic()}.
 
 \subsubsection{Bootstrapping}
 As for any two-sample test in SHOGUN, bootstrapping can be used to approximate the null distribution. This results in a consistent, but slow test. The number of samples to take is the only parameter. As a rule of thumb, use at least 250 samples.
