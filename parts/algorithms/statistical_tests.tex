@@ -106,9 +106,7 @@ Approximates the null-distribution using the Eigen-Spectrum of the kernel matrix
 \label{eqn:quadratic_mmd_spectrum}
 m\mmd^2_b \rightarrow \sum_{l=1}^\infty \lambda_l z_l^2
 \end{align}
-where $z_l\sim \mathcal{N}(0,2)$ are i.i.d. normal samples and $\lambda_l$ Eigenvalues of expression 2 in \citep{Gretton2012b}, which can be empirically estimated by $\hat\lambda_l=\frac{1}{m}\nu_l$ where $\nu_l$ are the Eigenvalues of the centred kernel matrix of the joint samples $X$ and $Y$. The distribution in expression \ref{eqn:quadratic_mmd_spectrum} can be easily sampled. 
-
-There are two parameters:
+where $z_l\sim \mathcal{N}(0,2)$ are i.i.d. normal samples and $\lambda_l$ Eigenvalues of expression 2 in \citep{Gretton2012b}, which can be empirically estimated by $\hat\lambda_l=\frac{1}{m}\nu_l$ where $\nu_l$ are the Eigenvalues of the centred kernel matrix of the joint samples $X$ and $Y$. The distribution in expression \ref{eqn:quadratic_mmd_spectrum} can be easily sampled. SHOGUN's implementation has two parameters:
 \begin{itemize}
 \item Number of samples from null-distribution. The more, the more accurate. As a rule of thumb, use 250.
 \item Number of Eigenvalues of the Eigen-decomposition of the kernel matrix to use. The more, the better the results get; however, the Eigen-spectrum of the joint gram matrix usually decreases very fast. See \citep{Gretton2012b} for details.
