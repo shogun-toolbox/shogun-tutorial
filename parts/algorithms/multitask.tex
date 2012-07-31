@@ -10,14 +10,15 @@
 \chapter{Multitask learning}
 
 In this chapter we describe multitask learning algorithms available in the SHOGUN toolbox. 
-In the toolbox we include some multitask learning algorithms ported from two packages: SLEP 
-(the Sparse LEarning Package) and the MALSAR (Multi-tAsk Learning via StructurAl 
-Regularization) package.
+In the toolbox we include descriptions of some multitask learning algorithms 
+ported from two packages: SLEP (the Sparse LEarning Package) and the MALSAR 
+(Multi-tAsk Learning via StructurAl Regularization) package.
 
 \section{$L_1/L_q$-norm regularized multitask learning}
 
-One of the simplest approaches to learn linear classification and regression models is to
-use regularization based on $L_1/L_q$ norm of the common $w$ hyperparameter
+One of the simplest approaches to learn linear classification and regression models in the 
+multitask environment is to come with regularization based on $L_1/L_q$ norm 
+of the common $w$ hyperparameter
 $$
 \| w \|_{1/q}
 $$ 
@@ -85,8 +86,44 @@ $$
 where $G = \{ G_0, \dots, G_T \}$ is a set of tasks' tree indices, $\forall_i x_i$ are feature 
 vectors and $\forall_i y_i \in \{-1,1\}$ are labels.
 
-\section{Joint Feature Learning}
+\section{Low rank approximations}
 
-\section{Low rank}
+Tasks relationship can be constrained with models based on shared low-dimensional subspace. That can be done
+via solving the following optimization problem:
+$$
+\min_{W=\left[w_1, \dots, w_T\right]} L (W) + \lambda \mathop{\mathrm{rank}}(W),
+$$
+where $L$ is a pre-defined loss function. It is known that the problem is NP-hard which makes it infeasible
+to solve in real applications. In practice similar problem is
+$$
+\min_{W=\left[w_1, \dots, w_T\right]} L (W) + \lambda \|W\|_{*},
+$$
+where the sum of the singular values $\|W\|_{*} = \sum_i \sigma_i(W)$ is the trace norm.
 
-\section{Clustered learning}
+\subsection{Least squares linear regression}
+
+The algorithm learns a multitask linear least squares regression model of regression 
+$$
+f_t(x) = \langle w_t,x \rangle + b_t, ~~ t = 1, \dots, T,
+$$
+where $T$ is a number of tasks, from the solution of the following optimization problem:
+$$
+\min_{W=\left[w_1, \dots, w_T\right]} \sum_{t=1}^{T} \sum_{i \in G_t} \left(\langle w_t,x_i \rangle + b_t - y_i\right)^2
++ \sum_i \sigma_i(W),
+$$
+where $G = \{ G_1, \dots, G_T \}$ is a set of tasks' non-overlapping indices, $\forall_i x_i$ are feature 
+vectors and $\forall_i y_i \in \mathbb{R}$ are labels.
+
+\subsection{Logistic regression}
+
+The algorithm learns a multitask linear logistic model of classification 
+$$
+f_t(x) = sign (\langle w_t,x \rangle + b_t), ~~ t = 1, \dots, T,
+$$
+where $T$ is a number of tasks, from the solution of the following optimization problem:
+$$
+\min_{W=\left[w_1, \dots, w_T\right]} \sum_{t=1}^{T} \sum_{i \in G_t} \frac{1}{|G_t|} \log (1+\exp\left(-y_i(\langle w_t,x_i \rangle + b_t)\right)
++ \sum_i \sigma_i(W),
+$$
+where $G = \{ G_1, \dots, G_T \}$ is a set of tasks' non-overlapping indices, $\forall_i x_i$ are feature 
+vectors and $\forall_i y_i \in \{-1,1\}$ are labels.
