@@ -47,3 +47,6 @@
 
 \newcommand{\shogunclass}[1]{\href{http://www.shogun-toolbox.org/doc/en/latest/classshogun_1_1#1.html}{\texttt{#1}}}
 \newcommand{\shogun}{\textsf{SHOGUN}}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
