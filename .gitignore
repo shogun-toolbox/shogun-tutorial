@@ -2,3 +2,10 @@
 shogun_tutorial.pdf
 *.synctex.gz
 *.aux
+*.bbl
+*.blg
+*.fls
+*.out
+*.tdo
+*.toc
+*.fdb_latexmk

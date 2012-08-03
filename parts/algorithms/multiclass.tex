@@ -1,0 +1,54 @@
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.3
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+% A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+%
+% Written (C) 2012 Chiyuan Zhang
+
+\chapter{Multiclass learning}
+
+In this chapter we describe multiclass learning algorithms available in the
+\shogun{} toolbox. 
+Multiclass learning refers to the problem with the output space
+$\mathcal{Y}=\{1,\ldots,K\}$, where $K>2$.  Most of real world machine learning
+classification problems are naturally multiclass.   Typical examples include
+document categorization, image classification, hand-written digit recognition,
+etc.  
+
+Generally, no assumption of any specific structure for the set $\mathcal{Y}$
+are made in multiclass learning.  When priori knowledge are available for a
+rich structure of $\mathcal{Y}$, \emph{structured-output learning} algorithms
+are usually used instead.
+
+\section{Reduction to Binary Problems}
+
+Since binary classification problems are one of the most thoroughly studied
+problems in machine learning, it is very appealing to consider reducing
+multiclass problems to binary ones. Then many advanced learning and
+optimization techniques as well as generalization bound analysis for binary
+classification can be utilized.
+
+In \shogun{}, the strategies of reducing a multiclass problem to binary
+classification problems are described by an instance of
+\shogunclass{CMulticlassStrategy}. A multiclass strategy describes
+\begin{enumerate}
+\item How to train the multiclass machine as a number of binary machines?
+	\begin{itemize}
+		\item How many binary machines are needed?
+		\item For each binary machine, what subset of the training samples are
+			used, and how are they colored\footnote{In multiclass problems, we
+				use \emph{coloring} to refer partitioning the classes into two
+				groups: $+1$ and $-1$, or black and white, or any other meaningful
+				names.}?
+	\end{itemize}
+\item How to combine the prediction results of binary machines into the final
+	multiclass prediction?
+\end{enumerate}
+
+The user can derive from the virtual class \shogunclass{CMulticlassStrategy} to
+implement a customized multiclass strategy. But usually the built-in strategies
+are enough for general problems. We will describe the built-in \emph{One-vs-Rest},
+\emph{One-vs-One} and \emph{Error-Correcting Output Codes} strategies in the
+following subsections.
