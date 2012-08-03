@@ -21,7 +21,7 @@ One of the simplest approaches to learn linear classification and regression mod
 multitask environment is to come with regularization based on $L_1/L_q$ norm 
 of the common $w$ hyperparameter
 $$
-\| w \|_{1/q}
+\| w \|_{1/q} = \sum_{t=1}^{T} \| w \|_q.
 $$ 
 That kind of regularization in the same time pulls corresponding weights 
 of hyperparameters $w_t$ to be similar and pulls non-relevant feature weights
@@ -57,7 +57,7 @@ vectors and $\forall_i y_i \in \{-1,1\}$ are labels.
 
 \section{Tree structured group lasso multitask learning}
 
-In some cases relations between tasks can be described via tree. 
+In some cases relations between tasks can be described via tree structure. 
 
 \subsection{Least squares linear regression}
 
@@ -128,3 +128,51 @@ $$
 $$
 where $G = \{ G_1, \dots, G_T \}$ is a set of tasks' non-overlapping indices, $\forall_i x_i$ are feature 
 vectors and $\forall_i y_i \in \{-1,1\}$ are labels.
+
+\section{Clustered multitask learning}
+
+Other approach assuming tasks may exhibit $k$-cluster structure. That kind of structure
+makes learned models of similar tasks (i.e. tasks of one cluster) to be closer to each 
+other than to other tasks. The approach can be formalized to the following optimization
+problem
+$$
+\min_{W=\left[w_1, \dots, w_T\right]} L (W) + \alpha (\mathop{\mathrm{tr}} W^{T} W - \mathop{\mathrm{tr}} F^{T} W^{T} W F) + \beta \mathop{\mathrm{tr}} W^{T} W,
+$$
+where $L$ is a pre-defined loss function. The problem can be also relaxed to be convex:
+$$
+\min_{W=\left[w_1, \dots, w_T\right]} L (W) + \rho_1 \eta (1+\eta) (\mathop{\mathrm{tr}} (W (\eta I + M)^{-1} W^{T})
+$$
+subject to $\mathop{\mathrm{tr}} M = k$, $M \preceq I$, $\eta = \frac{\rho_2}{\rho_1}$.
+
+\subsection{Least squares linear regression}
+
+The algorithm learns a multitask linear least squares regression model of regression 
+$$
+f_t(x) = \langle w_t,x \rangle + b_t, ~~ t = 1, \dots, T,
+$$
+where $T$ is a number of tasks, from the solution of the following optimization problem:
+$$
+\min_{W=\left[w_1, \dots, w_T\right]} \sum_{t=1}^{T} \sum_{i \in G_t} \left(\langle w_t,x_i \rangle + b_t - y_i\right)^2
++ \rho_1 \eta (1+\eta) (\mathop{\mathrm{tr}} (W (\eta I + M)^{-1} W^{T}),
+$$
+subject to $\mathop{\mathrm{tr}} M = k$, $M \preceq I$, $\eta = \frac{\rho_2}{\rho_1}$; where $G = \{ G_1, \dots, G_T \}$ 
+is a set of tasks' non-overlapping indices, $\forall_i x_i$ are feature 
+vectors and $\forall_i y_i \in \mathbb{R}$ are labels.
+
+\subsection{Logistic regression}
+
+The algorithm learns a multitask linear logistic model of classification 
+$$
+f_t(x) = sign (\langle w_t,x \rangle + b_t), ~~ t = 1, \dots, T,
+$$
+where $T$ is a number of tasks, from the solution of the following optimization problem:
+$$
+\min_{W=\left[w_1, \dots, w_T\right]} \sum_{t=1}^{T} \sum_{i \in G_t} \frac{1}{|G_t|} \log (1+\exp\left(-y_i(\langle w_t,x_i \rangle + b_t)\right)
++ \rho_1 \eta (1+\eta) (\mathop{\mathrm{tr}} (W (\eta I + M)^{-1} W^{T}),
+$$
+subject to $\mathop{\mathrm{tr}} M = k$, $M \preceq I$, $\eta = \frac{\rho_2}{\rho_1}$; where $G = \{ G_1, \dots, G_T \}$ 
+is a set of tasks' non-overlapping indices, $\forall_i x_i$ are feature 
+vectors and $\forall_i y_i \in \{-1,1\}$ are labels.
+
+
+
