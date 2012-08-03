@@ -9,12 +9,17 @@
 % Written (C) 2012 Sergey Lisitsyn
 
 \documentclass{shogun_tutorial}
-
+\tolerance=2000
 \input{operators}
 
 \title{SHOGUN-tutorial}
 \date{\today}
-\author{Sergey Lisitsyn, Heiko Strathmann}
+\author
+{
+Sergey Lisitsyn \and 
+Heiko Strathmann \and 
+Chiyuan Zhang \and 
+}
 
 \begin{document}
 	\maketitle
@@ -29,11 +34,14 @@
     
 	\tableofcontents
 	\listoftodos
+	\part{Essentials}
+	\input{parts/essentials/learning}
 	\part{Algorithms}
 	%\input{parts/algorithms/kernels}
+	\input{parts/algorithms/multiclass}
 	\input{parts/algorithms/statistical_tests}
 	\input{parts/algorithms/multitask}
-	\input{parts/algorithms/multiclass}
+	
 	
 	\begin{appendix}
 	\input{parts/appendix/license}
