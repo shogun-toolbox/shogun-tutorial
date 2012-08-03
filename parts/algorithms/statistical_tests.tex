@@ -8,7 +8,7 @@
 % Written (C) 2012 Heiko Strathmann
 
 \chapter{Statistical Testing}
-This chapter describes SHOGUN's framework for statistical hypothesis testing. We begin by giving a brief outline of the problem setting in section \ref{sec:hypothesis_testing_into}. Then, we describe methods for two-sample testing for independence testing in section.
+This chapter describes \shogun{}'s framework for statistical hypothesis testing. We begin by giving a brief outline of the problem setting in section \ref{sec:hypothesis_testing_into}. Then, we describe methods for two-sample testing for independence testing in section.
 
 Methods for two-sample testing currently consist of tests based on the \emph{Maximum Mean Discrepancy}, section \ref{sec:mmd_into}. There are two types of tests available, a quadratic time test, which is described in section \ref{sec:mmd_quadratic}; and a linear time test, which is described in section \ref{sec:mmd_linear}. Both come in various flavours.
 
@@ -56,7 +56,7 @@ Output is:
 
 Bootstrapping is a useful technique to create ground-truth samples for a null-distribution. However, it is rather costly because the statistic has to be re-computed for every sample.
 
-SHOGUN implements statistical testing in the abstract class \shogunclass{CTestStatistic}.
+\shogun{} implements statistical testing in the abstract class \shogunclass{CTestStatistic}.
 \begin{itemize}
 \item Test statistics can be computed with \texttt{compute\_statistic()}.
 \item P-values for a given statistic can be computed via \texttt{compute\_p\_value()}. Results depend on method that is set for approximating null-distribution.
@@ -82,11 +82,13 @@ In order to solve this problem, it is desirable to have a criterion than takes a
   2\textbf{E}_{x,y}\left[ k(x,y)\right]
   +\textbf{E}_{y,y'}\left[ k(y,y')\right]\notag
 \end{align}
-See \citep[Section 2]{Gretton2012} for details. We here only describe how to use the MMD for two-sample testing. SHOGUN offers two types of test statistic based on the MMD, one with quadratic costs both in time and space, and on with linear time and constant space costs. Both come in different versions and with different methods how to approximate the null-distribution in order to construct a two-sample test.
+See \citep[Section 2]{Gretton2012} for details. We here only describe how to
+use the MMD for two-sample testing. \shogun{} offers two types of test statistic based on the MMD, one with quadratic costs both in time and space, and on with linear time and constant space costs. Both come in different versions and with different methods how to approximate the null-distribution in order to construct a two-sample test.
 
 \subsection{Quadratic Time MMD Statistic}
 \label{sec:mmd_quadratic}
-We now describe the quadratic time MMD, as described in \citep[Lemma 6]{Gretton2012}, which is implemented in SHOGUN. All methods in this section are implemented in \shogunclass{CQuadraticTimeMMD}.
+We now describe the quadratic time MMD, as described in \citep[Lemma
+6]{Gretton2012}, which is implemented in \shogun{}. All methods in this section are implemented in \shogunclass{CQuadraticTimeMMD}.
 
 An unbiased estimate for expression \ref{eqn:mmd_population} can be obtained by estimating expected values with sample means
 \begin{align*}
@@ -103,7 +105,7 @@ A biased estimate would be
 To compute statistic, use \texttt{compute\_statistic()}. To decide which statistic to use, use \texttt{set\_statistic\_type()} with arguments \texttt{BIASED} or \texttt{UNBIASED} to activate this statistic type. Note that some methods for approximating the null-distribution only work with one of both types. Both statistics' computational costs are quadratic both in time and space.
 
 \subsubsection{Bootstrapping}
-As for any two-sample test in SHOGUN, bootstrapping can be used to approximate the null-distribution with both types of quadratic MMD statistic. This results in a consistent, but slow test. Note that for each sample, the quadratic time estimate has to be re-computed. The number of samples to take is the only parameter. As a rule of thumb, use at least 250 samples.
+As for any two-sample test in \shogun{}, bootstrapping can be used to approximate the null-distribution with both types of quadratic MMD statistic. This results in a consistent, but slow test. Note that for each sample, the quadratic time estimate has to be re-computed. The number of samples to take is the only parameter. As a rule of thumb, use at least 250 samples.
 See \texttt{bootstrap\_null()} in \shogunclass{CTwoSampleTestStatistic}.
 
 \subsubsection{Spectrum Approximation}
@@ -113,7 +115,11 @@ Approximates the null-distribution using the Eigen-Spectrum of the kernel matrix
 \label{eqn:quadratic_mmd_spectrum}
 m\mmd^2_b \rightarrow \sum_{l=1}^\infty \lambda_l z_l^2
 \end{align}
-where $z_l\sim \mathcal{N}(0,2)$ are i.i.d. normal samples and $\lambda_l$ Eigenvalues of expression 2 in \citep{Gretton2012b}, which can be empirically estimated by $\hat\lambda_l=\frac{1}{m}\nu_l$ where $\nu_l$ are the Eigenvalues of the centred kernel matrix of the joint samples $X$ and $Y$. The distribution in expression \ref{eqn:quadratic_mmd_spectrum} can be easily sampled. SHOGUN's implementation has two parameters:
+where $z_l\sim \mathcal{N}(0,2)$ are i.i.d. normal samples and $\lambda_l$
+Eigenvalues of expression 2 in \citep{Gretton2012b}, which can be empirically
+estimated by $\hat\lambda_l=\frac{1}{m}\nu_l$ where $\nu_l$ are the Eigenvalues
+of the centred kernel matrix of the joint samples $X$ and $Y$. The distribution
+in expression \ref{eqn:quadratic_mmd_spectrum} can be easily sampled. \shogun{}'s implementation has two parameters:
 \begin{itemize}
 \item Number of samples from null-distribution. The more, the more accurate. As a rule of thumb, use 250.
 \item Number of Eigenvalues of the Eigen-decomposition of the kernel matrix to use. The more, the better the results get; however, the Eigen-spectrum of the joint gram matrix usually decreases very fast. See \citep{Gretton2012b} for details.
@@ -140,7 +146,8 @@ To use that method for testing, use \texttt{set\_null\_approximation\_method(MMD
 
 \subsection{Linear Time MMD Statistic}
 \label{sec:mmd_linear}
-We now describe the linear time MMD, as described in \citep[Section 6]{Gretton2012}, which is implemented in SHOGUN. All methods in this section are implemented in \shogunclass{CLinearTimeMMD}.
+We now describe the linear time MMD, as described in \citep[Section
+6]{Gretton2012}, which is implemented in \shogun{}. All methods in this section are implemented in \shogunclass{CLinearTimeMMD}.
 
 An fast, unbiased estimate for expression \ref{eqn:mmd_population} which still uses all available data can be obtained by dividing data into two parts and then compute
 
@@ -151,7 +158,7 @@ An fast, unbiased estimate for expression \ref{eqn:mmd_population} which still u
 where $ m_2=\lfloor\frac{m}{2} \rfloor$. This statistic is interesting for large scale tests since its computational costs are linear in the number of samples; and the space costs are constant -- it is therefore very suitable for large amounts of streaming data. To compute statistic, use \texttt{compute\_statistic()}.
 
 \subsubsection{Bootstrapping}
-As for any two-sample test in SHOGUN, bootstrapping can be used to approximate the null distribution. This results in a consistent, but slow test. The number of samples to take is the only parameter. As a rule of thumb, use at least 250 samples.
+As for any two-sample test in \shogun{}, bootstrapping can be used to approximate the null distribution. This results in a consistent, but slow test. The number of samples to take is the only parameter. As a rule of thumb, use at least 250 samples.
 See \texttt{bootstrap\_null()} in \shogunclass{CTwoSampleTestStatistic}.
 
 \subsubsection{Gaussian Approximation}
