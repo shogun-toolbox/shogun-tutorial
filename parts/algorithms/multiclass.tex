@@ -9,13 +9,14 @@
 
 \chapter{Multiclass learning}
 
-In this chapter we describe multiclass learning algorithms available in the
-\shogun{} toolbox. 
-Multiclass learning refers to the problem with the output space
-$\mathcal{Y}=\{1,\ldots,K\}$, where $K>2$.  Most of real world machine learning
-classification problems are naturally multiclass.   Typical examples include
-document categorization, image classification, hand-written digit recognition,
-etc.  
+In this chapter we describe multiclass learning algorithms available in the 
+\shogun{} toolbox.  Multiclass learning refers to the problem with the output 
+space $\mathcal{Y}=\{1,\ldots,K\}$\footnote{Note while we describe the class 
+	numbers as from $1$ to $K$, the multiclass machines in \shogun{} expect 
+	the examples to be labeled with $0,\ldots,K-1$.}, where $K>2$.  Most of 
+real world machine learning classification problems are naturally multiclass.   
+Typical examples include document categorization, image classification, 
+hand-written digit recognition, etc.  
 
 Generally, no assumption of any specific structure for the set $\mathcal{Y}$
 are made in multiclass learning.  When priori knowledge are available for a
@@ -52,3 +53,69 @@ implement a customized multiclass strategy. But usually the built-in strategies
 are enough for general problems. We will describe the built-in \emph{One-vs-Rest},
 \emph{One-vs-One} and \emph{Error-Correcting Output Codes} strategies in the
 following subsections.
+
+The basic routine to use a multiclass machine with reduction to binary problems
+in shogun is to create a generic multiclass machine and then assign a particular
+multiclass strategy and a base binary machine.
+
+\subsection{One-vs-Rest and One-vs-One}
+
+The \emph{One-vs-Rest} strategy is implemented in
+\shogunclass{CMulticlassOneVsRestStrategy}. As indicated by the name, this
+strategy reduce a $K$-class problem to $K$ binary sub-problems. For the $k$-th
+problem, where $k\in\{1,\ldots,K\}$, the samples from class $k$ are colored as
+$+1$, and the samples from other classes are colored as $-1$. The multiclass
+prediction is given as
+
+\[
+	f(x) = \argmax_{k\in\{1,\ldots,K\}} f_k(x)
+\]
+where $f_k(x)$ is the prediction of the $k$-th binary machines.
+
+The One-vs-Rest strategy is easy to implement yet produces the good performance
+in many cases. One interesting paper \cite{OneVsRestDefense} shows that the
+One-vs-Rest strategy can be
+
+\begin{quote}
+	\emph{as accurate as any other approach, assuming that the underlying binary
+classifiers are well-tuned regularized classifiers such as support vector
+machines.}
+\end{quote}
+
+The \emph{One-vs-One} strategy \cite{OneVsOne}, implemented in
+\shogunclass{CMulticlassOneVsOneStrategy} is another simple and intuitive
+strategy: it basically produces one binary problem for each pair of classes.
+So there will be $\binom{K}{2}$ binary problems. At prediction time, the output
+of every binary classifiers are collected to do voting for the $K$ classes. The
+class with the highest vote becomes the final prediction.
+
+Compared with the One-vs-Rest strategy, the One-vs-One strategy is usually more
+costly to train and evaluate because more binary machines are used.
+
+In the following, we demonstrate how to use \shogun{}'s One-vs-Rest and 
+One-vs-One multiclass learning strategy on a 10-class hand-written digit 
+recognition problem.  Specifically, we use the USPS dataset\footnote{Available 
+	from mldata.org: \url{http://mldata.org/repository/data/viewslug/usps/}.}. 
+The dataset contains 9298 examples, for demonstration, we randomly 200 samples 
+from each class for training and 200 samples from each class for testing.
+
+\begin{table}\centering
+	\begin{tabular}{|c|c|c|c|}
+	\hline
+	Strategy & Training Time & Test Time & Accuracy \\
+	\hline\hline
+	One-vs-Rest & 1.72       & 2.25      & 92.05\%  \\
+	One-vs-One  & 2.14       & 4.45      & 93.75\%  \\
+	\hline
+	\end{tabular}
+	\caption{Comparison of One-vs-Rest and One-vs-One multiclass reduction
+		strategy on the USPS dataset.}
+	\label{tab:ovr-vs-ovo}
+\end{table}
+
+The \shogunclass{CLibLinear} is used as the base binary classifier in a
+\shogunclass{CLinearMulticlassMachine}, with One-vs-Rest and One-vs-One
+strategies. The running time and performance is reported in
+Table~\ref{tab:ovr-vs-ovo}.
+
+\subsection{Error-Correcting Output Codes}
