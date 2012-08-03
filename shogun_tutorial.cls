@@ -33,7 +33,7 @@
 \pagestyle{followingpage}
 
 \RequirePackage[utf8]{inputenc}
-\RequirePackage{hyperref}
+\RequirePackage[colorlinks=true]{hyperref}
 \RequirePackage{amssymb}
 \RequirePackage{amsmath}
 \RequirePackage{psfrag}
@@ -46,3 +46,4 @@
 \numberwithin{algorithm}{chapter}
 
 \newcommand{\shogunclass}[1]{\href{http://www.shogun-toolbox.org/doc/en/latest/classshogun_1_1#1.html}{\texttt{#1}}}
+\newcommand{\shogun}{\textsf{SHOGUN}}
