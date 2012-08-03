@@ -41,6 +41,8 @@ $$
 where $G = \{ G_1, \dots, G_T \}$ is a set of tasks' non-overlapping indices, $\forall_i x_i$ are feature 
 vectors and $\forall_i y_i \in \mathbb{R}$ are labels.
 
+The algoritm is implemented in \shogunclass{CMultitaskLeastSquaresRegression}.
+
 \subsection{Logistic regression}
 
 The algorithm learns a multitask linear logistic model of classification 
@@ -54,6 +56,8 @@ $$
 $$
 where $G = \{ G_1, \dots, G_T \}$ is a set of tasks' non-overlapping indices, $\forall_i x_i$ are feature 
 vectors and $\forall_i y_i \in \{-1,1\}$ are labels.
+
+The algorithm is implemented in \shogunclass{CMultitaskLogisticRegression}.
 
 \section{Tree structured group lasso multitask learning}
 
@@ -73,6 +77,8 @@ $$
 where $G = \{ G_0, \dots, G_T \}$ is a set of tasks' tree indices, $\forall_i x_i$ are feature 
 vectors and $\forall_i y_i \in \mathbb{R}$ are labels.
 
+The algorithm is implemented in \shogunclass{CMultitaskLeastSquaresRegression}.
+
 \subsection{Logistic regression}
 
 The algorithm learns a multitask linear logistic model of classification 
@@ -86,6 +92,8 @@ $$
 $$
 where $G = \{ G_0, \dots, G_T \}$ is a set of tasks' tree indices, $\forall_i x_i$ are feature 
 vectors and $\forall_i y_i \in \{-1,1\}$ are labels.
+
+The algorithm is implemented in \shogunclass{CMultitaskLogisticRegression}.
 
 \section{Low rank approximations}
 
@@ -128,6 +136,8 @@ $$
 $$
 where $G = \{ G_1, \dots, G_T \}$ is a set of tasks' non-overlapping indices, $\forall_i x_i$ are feature 
 vectors and $\forall_i y_i \in \{-1,1\}$ are labels.
+
+The algorithm is implemented in \shogunclass{CMultitaskTraceLogisticRegression}.
 
 \section{Clustered multitask learning}
 
@@ -174,5 +184,4 @@ subject to $\mathop{\mathrm{tr}} M = k$, $M \preceq I$, $\eta = \frac{\rho_2}{\r
 is a set of tasks' non-overlapping indices, $\forall_i x_i$ are feature 
 vectors and $\forall_i y_i \in \{-1,1\}$ are labels.
 
-
-
+The algorithm is implemented in \shogunclass{CMultitaskClusteredLogisticRegression}.
