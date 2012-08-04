@@ -36,14 +36,18 @@
 \RequirePackage[colorlinks=true]{hyperref}
 \RequirePackage{amssymb}
 \RequirePackage{amsmath}
+\RequirePackage{fancyvrb}
 \RequirePackage{psfrag}
 \RequirePackage{graphicx}
-\RequirePackage{subfig}
+\RequirePackage{caption}
+\RequirePackage{subcaption}
 \RequirePackage{todonotes}
 \RequirePackage[toc,page]{appendix}
 \RequirePackage[square]{natbib}
+\RequirePackage{booktabs}
 \RequirePackage{algorithmic,algorithm}
 \numberwithin{algorithm}{chapter}
+
 
 \newcommand{\shogunclass}[1]{\href{http://www.shogun-toolbox.org/doc/en/latest/classshogun_1_1#1.html}{\texttt{#1}}}
 \newcommand{\shogun}{\textsf{SHOGUN}}
