@@ -23,7 +23,89 @@ are made in multiclass learning.  When priori knowledge are available for a
 rich structure of $\mathcal{Y}$, \emph{structured-output learning} algorithms
 are usually used instead.
 
+Many algorithms, like K-Nearest Neighbors and Naive Bayes, handle both 
+multiclass problems and binary problems naturally (and in an uniform way). 
+Those are described in section~\ref{sec:multiclass-natural}. 
+Section~\ref{sec:multiclass-reduction} describes reduction from multiclass 
+problems into binary problems. Tree-styled classifiers are described in 
+section~\ref{sec:multiclass-tree}.
+
+Several standard datasets are used by examples in this chapter. We summarize
+them in Table~\ref{tab:multiclass-dataset}. All of those datasets can be found
+in \url{http://mldata.org}.
+
+\begin{table}[t]\centering
+	\begin{tabular}{ccccc}
+		\toprule
+		Name & \# Classes & \# Samples & \# Attributes & Remarks \\
+		\midrule
+		USPS & 10         & 9298       & 256           & Hand-written Digits \\
+		\bottomrule
+	\end{tabular}
+	\caption{Standard datasets for multiclass learning used in examples.}
+	\label{tab:multiclass-dataset}
+\end{table}
+
+\section{Natural Multiclass Algorithms}
+\label{sec:multiclass-natural}
+
+\subsection{K-Nearest Neighbors}
+\emph{K-Nearest Neighbors} (KNN) is a very simple and effective algorithm. The 
+learning step actually does nothing but memorizing all the training points and 
+the associated labels. The prediction is carried out by finding the $K$ 
+nearest neighbors of the query point, and then voting.  Here $K$ is a 
+hyper-parameter for the algorithm. Smaller $K$ gives the model low bias but 
+high variance; while larger $K$ gives low variance but high bias.
+
+KNN has attracted focus from both industrial and academia ever since its
+conception. It is easy to implement, and can handle almost arbitrarily complex
+problem by adjusting one single parameter $K$. Besides, it also has many nice
+theoretical properties \citep{ProbTheoryofPR}.
+
+In \shogun, you can use \shogunclass{CKNN} to perform KNN learning. To
+construct a KNN machine, you must choose the hyper-parameter $K$ and a distance
+function. Usually, we simply use the \shogunclass{CEuclideanDistance}, but in
+general, any subclass of \shogunclass{CDistance} can be used. For
+demonstration, we select a random subset of 1000 samples from USPS, and run
+2-fold cross validation of KNN on it with varying $K$. The accuracy is shown in
+Fig.~\ref{fig:mc-knn-acc}.
+
+In \shogun{}, you can also use \emph{Cover Tree} \citep{CoverTree} to speed up
+the nearest neighbor searching process in KNN. Just call \Verb|set_use_covertree| on
+the KNN machine to enable or disable this feature. The prediction time
+comparison for this experiment with and without Cover Tree are shown in
+Fig.~\ref{fig:mc-knn-time}.
+
+\begin{figure}\centering
+	\begin{subfigure}{.48\textwidth}
+		\includegraphics[width=\textwidth]{fig/multiclass/knn-accuracy}
+		\caption{KNN classification accuracy on USPS.}
+		\label{fig:mc-knn-acc}
+	\end{subfigure}
+	~
+	\begin{subfigure}{.48\textwidth}
+		\includegraphics[width=\textwidth]{fig/multiclass/knn-time}
+		\caption{Prediction time (per example) with and without CoverTree.}
+		\label{fig:mc-knn-time}
+	\end{subfigure}
+	\caption{KNN classification on a random subset (1000 samples) of USPS.}
+\end{figure}
+
+Although simple and elegant, KNN is generally very resource costly. Because all
+the training samples are to be memorized literally, the memory cost of KNN
+``learning'' becomes prohibitive when the dataset is huge. Even though the
+memory is big enough to hold all the data, the prediction will be slow, since
+the distances between the query point and all the training points need to be
+computed and ranked. The situation becomes worse if in addition the data
+samples are all very high-dimensional.
+
+\subsection{Naive Bayes}
+\emph{Naive Bayes} (especially \emph{Gaussian Naive Bayes}) can be thought as a
+``coarse'' version of KNN. 
+KNN memory, Naive Bayes comes to save the world.
+
 \section{Reduction to Binary Problems}
+\label{sec:multiclass-reduction}
 
 Since binary classification problems are one of the most thoroughly studied
 problems in machine learning, it is very appealing to consider reducing
@@ -73,7 +155,7 @@ prediction is given as
 where $f_k(x)$ is the prediction of the $k$-th binary machines.
 
 The One-vs-Rest strategy is easy to implement yet produces the good performance
-in many cases. One interesting paper \cite{OneVsRestDefense} shows that the
+in many cases. One interesting paper \citep{OneVsRestDefense} shows that the
 One-vs-Rest strategy can be
 
 \begin{quote}
@@ -82,31 +164,30 @@ classifiers are well-tuned regularized classifiers such as support vector
 machines.}
 \end{quote}
 
-The \emph{One-vs-One} strategy \cite{OneVsOne}, implemented in
-\shogunclass{CMulticlassOneVsOneStrategy} is another simple and intuitive
-strategy: it basically produces one binary problem for each pair of classes.
-So there will be $\binom{K}{2}$ binary problems. At prediction time, the output
-of every binary classifiers are collected to do voting for the $K$ classes. The
-class with the highest vote becomes the final prediction.
+Implemented in \shogunclass{CMulticlassOneVsOneStrategy}, the 
+\emph{One-vs-One} strategy \citep{OneVsOne} is another simple and intuitive 
+strategy: it basically produces one binary problem for each pair of classes.  
+So there will be $\binom{K}{2}$ binary problems. At prediction time, the 
+output of every binary classifiers are collected to do voting for the $K$ 
+classes. The class with the highest vote becomes the final prediction.
 
 Compared with the One-vs-Rest strategy, the One-vs-One strategy is usually more
 costly to train and evaluate because more binary machines are used.
 
 In the following, we demonstrate how to use \shogun{}'s One-vs-Rest and 
-One-vs-One multiclass learning strategy on a 10-class hand-written digit 
-recognition problem.  Specifically, we use the USPS dataset\footnote{Available 
-	from mldata.org: \url{http://mldata.org/repository/data/viewslug/usps/}.}. 
-The dataset contains 9298 examples, for demonstration, we randomly 200 samples 
-from each class for training and 200 samples from each class for testing.
+One-vs-One multiclass learning strategy on the USPS dataset.  For 
+demonstration, we randomly 200 samples from each class for training and 200 
+samples from each class for testing.
+\todo[inline]{How to organize and reference example code for tutorial?}
 
 \begin{table}\centering
-	\begin{tabular}{|c|c|c|c|}
-	\hline
+	\begin{tabular}{cccc}
+	\toprule
 	Strategy & Training Time & Test Time & Accuracy \\
-	\hline\hline
+	\midrule
 	One-vs-Rest & 1.72       & 2.25      & 92.05\%  \\
 	One-vs-One  & 2.14       & 4.45      & 93.75\%  \\
-	\hline
+	\bottomrule
 	\end{tabular}
 	\caption{Comparison of One-vs-Rest and One-vs-One multiclass reduction
 		strategy on the USPS dataset.}
@@ -119,3 +200,9 @@ strategies. The running time and performance is reported in
 Table~\ref{tab:ovr-vs-ovo}.
 
 \subsection{Error-Correcting Output Codes}
+
+\emph{Error-Correcting Output Codes} (ECOC) \citep{ECOC95,ECOCUnify} is a
+generalization of the One-vs-Rest and One-vs-One strategies.
+
+\section{Tree-style Algorithms}
+\label{sec:multiclass-tree}
