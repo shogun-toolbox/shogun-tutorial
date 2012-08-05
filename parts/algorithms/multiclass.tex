@@ -108,6 +108,12 @@ class $k$ after observing the input $x$:
 	P\left( Y=k | X = x \right) = \frac{P(X=x|Y=k)P(Y=k)}{P(X=x)}
 \]
 
+The prediction is then made by
+
+\[
+	y = \argmax_{k\in\{1,\ldots,K\}} P(Y=k|X=x)
+\]
+
 Since $P(X=x)$ is a constant factor for all $P(Y=k|X=x)$, $k=1,\ldots,K$, there
 is no need to compute it.
 
@@ -124,6 +130,12 @@ email spam filtering, Naive Bayes\footnote{More specifically, the discrete
 	Gaussian Naive Bayes is that a tabular instead of a parametric Gaussian
 	distribution is used to describe the likelihood $P(X=x|K=k)$.} is a very
 popular and widely used method.
+
+This algorithm is closely related to the \emph{Gaussian Mixture Model} (GMM) learning
+algorithm. However, while GMM is an unsupervised learning algorithm, Gaussian
+Naive Bayes is supervised learning. It uses the training labels to directly
+estimate the Gaussian parameters for each class, thus avoids the iterative
+\emph{Expectation Maximization} procedures in GMM.
 
 \section{Reduction to Binary Problems}
 \label{sec:multiclass-reduction}
