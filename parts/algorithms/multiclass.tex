@@ -100,9 +100,30 @@ computed and ranked. The situation becomes worse if in addition the data
 samples are all very high-dimensional.
 
 \subsection{Naive Bayes}
-\emph{Naive Bayes} (especially \emph{Gaussian Naive Bayes}) can be thought as a
-``coarse'' version of KNN. 
-KNN memory, Naive Bayes comes to save the world.
+\emph{Naive Bayes} is a simple and fast algorithm for multiclass learning.
+Formally, it predict the class by computing the posterior probability of each
+class $k$ after observing the input $x$:
+
+\[
+	P\left( Y=k | X = x \right) = \frac{P(X=x|Y=k)P(Y=k)}{P(X=x)}
+\]
+
+Since $P(X=x)$ is a constant factor for all $P(Y=k|X=x)$, $k=1,\ldots,K$, there
+is no need to compute it.
+
+In \shogun{}, \shogunclass{CGaussianNaiveBayes} implements the Naive Bayes
+algorithm. It is prefixed with ``Gaussian'' because the probability model for
+$P(X=x|Y=k)$ for each $k$ is taken to be a multi-variate Gaussian distribution.
+Furthermore, each dimension of the feature vector $X$ is assumed to be
+independent. The ``Naive'' independence assumption enables us the learn the
+model very quickly, and is also the reason for its name. Although the
+independent assumption is usually considered to be too optimistic in reality,
+Naive Bayes sometimes works very well in some applications. For example, in
+email spam filtering, Naive Bayes\footnote{More specifically, the discrete
+	Naive Bayes is generally used in this scenario. The main difference with
+	Gaussian Naive Bayes is that a tabular instead of a parametric Gaussian
+	distribution is used to describe the likelihood $P(X=x|K=k)$.} is a very
+popular and widely used method.
 
 \section{Reduction to Binary Problems}
 \label{sec:multiclass-reduction}
