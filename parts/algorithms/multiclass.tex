@@ -137,6 +137,48 @@ Naive Bayes is supervised learning. It uses the training labels to directly
 estimate the Gaussian parameters for each class, thus avoids the iterative
 \emph{Expectation Maximization} procedures in GMM.
 
+The merit of GNB is that both training and predicting are very fast, and it has
+no hyper-parameters.
+
+\subsection{Logistic Regression}
+
+Although named logistic \emph{regression}, it is actually a classification
+algorithm. Similar to \emph{Naive Bayes}, logistic regression computes the
+posterior $P(Y=k|X=x)$ and makes prediction by
+
+\[
+    y = \argmax_{k\in\{1,\ldots,K\}} P(Y=k|X=x)
+\]
+
+However, Naive Bayes is a \emph{generative model}, in which the distribution of
+the input variable $X$ is also modeled (by a Gaussian distribution in this
+case). But logistic regression is a \emph{discriminative model}, which doesn't
+care about the distribution of $X$, and models the posterior directly.
+Actually, the two algorithms are a \emph{generative-discriminative pair}
+\citep{DBLP:conf/nips/NgJW01}.
+
+To be specific, logistic regression uses \emph{linear} functions in $X$ to model the
+posterior probabilities:
+
+\begin{eqnarray}
+    \log\frac{P(Y=1|X=x)}{P(Y=K|X=x)} &=& \beta_{10} + \beta_1^Tx \\
+    \log\frac{P(Y=2|X=x)}{P(Y=K|X=x)} &=& \beta_{20} + \beta_2^Tx \\
+    &\vdots& \nonumber\\
+    \log\frac{P(Y=K-1|X=x)}{P(Y=K|X=x)} &=& \beta_{(K-1)0} + \beta_{K-1}^Tx
+\end{eqnarray}
+
+The training of a logistic regression model is carried out via \emph{maximum
+    likelihood estimation} of the parameters
+$\boldsymbol\beta = \{\beta_{10},\beta_1^T,\ldots,\beta_{(K-1)0},\beta_{K-1}^T\}$. There is no
+closed form solution for the estimated parameters.
+
+There is not independent implementation of logistic regression in \shogun{}, 
+but the \shogunclass{CLibLinear} becomes a logistic regression model when
+constructed with the argument \Verb|L2R_LR|. This model also include a
+regularization term of the $\ell_2$-norm of $\boldsymbol\beta$. If sparsity in
+$\boldsymbol\beta$ is needed, one can also use \Verb|L1R_LR|, which replaces
+the $\ell_2$-norm regularizer with a $\ell_1$-norm regularizer.
+
 \section{Reduction to Binary Problems}
 \label{sec:multiclass-reduction}
 
