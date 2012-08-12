@@ -44,7 +44,7 @@ A biased estimator for expression \ref{eqn:hsic_population} is given by
 \begin{align*}
 \hsic_b[(X,Y),\mathcal{F},\mathcal{G}]=\frac{1}{m^2}\trace(\textbf{KHLH})
 \end{align*}
-where $\textbf{K}, \textbf{L}$ are the full kernel matrices of kernels $k, l$ respectively and $\textbf{H}=\textbf{I}-\frac{1}{m}\textbf{1}\textbf{1}^T$ is a centring matrix with $\textbf{1}$ being a $m\times m$ matrix of ones. In \shogun{}, this expression is not evaluated using matrix multiplication, but the centring is done by hand. Call \texttt{compute\_statistic} in order to compute the estimate. Note that the method returns $m\hsic_b$ for various reasons.
+where $\textbf{K}, \textbf{L}$ are the full kernel matrices of kernels $k, l$ respectively and $\textbf{H}=\textbf{I}-\frac{1}{m}\textbf{1}\textbf{1}^T$ is a centring matrix with $\textbf{1}$ being a $m\times m$ matrix of ones. In \shogun{}, this expression is not evaluated using matrix multiplication, but the centring is done by hand. Call \texttt{compute\_statistic} in order to compute the estimate. Note that the method returns $m\hsic_b[(X,Y),\mathcal{F},\mathcal{G}]$ since null distribution approximations work on $m$ times null distribution.
 
 \subsubsection{Bootstrapping}
 As for any independence test in \shogun{}, bootstrapping can be used to approximate the null-distribution with any type of statistic. This results in a consistent, but slow test. Note that for each sample, the HSIC estimate has to be re-computed. The number of samples to take is the only parameter. As a rule of thumb, use at least 250 samples.

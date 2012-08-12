@@ -43,7 +43,7 @@ A biased estimate would be
 &-\frac{2}{mn}\sum_{i=1}^m\sum_{j\neq i}^nk(x_i,y_j)
 \end{align*}
 
-To compute statistic, use \texttt{compute\_statistic}. To decide which statistic to use, use \texttt{set\_statistic\_type} with arguments \texttt{BIASED} or \texttt{UNBIASED} to activate this statistic type. Note that some methods for approximating the null-distribution only work with one of both types. Both statistics' computational costs are quadratic both in time and space.
+To compute statistic, use \texttt{compute\_statistic}. To decide which statistic to use, use \texttt{set\_statistic\_type} with arguments \texttt{BIASED} or \texttt{UNBIASED} to activate this statistic type. Note that some methods for approximating the null-distribution only work with one of both types. Both statistics' computational costs are quadratic both in time and space. Note that the method returns $m\mmd_b^2[\mathcal{F},X,Y]$ since null distribution approximations work on $m$ times null distribution.
 
 \subsubsection{Bootstrapping}
 As for any two-sample test in \shogun{}, bootstrapping can be used to approximate the null-distribution with both types of quadratic MMD statistic. This results in a consistent, but slow test. Note that for each sample, the quadratic time estimate has to be re-computed. The number of samples to take is the only parameter. As a rule of thumb, use at least 250 samples.
