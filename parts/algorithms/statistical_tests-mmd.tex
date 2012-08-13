@@ -120,3 +120,16 @@ To use that method for testing, use \texttt{set\_null\_approximation\_method(MMD
 For all MMD-based two-sample-tests, elements of kernel matrices of sample data have to be used. By default, all computations are done \emph{in-place} when possible, which means that the underlying kernel is evaluated on the fly (There are exceptions, when the matrix has to be stored, for example in order so solve Eigenvalue problems). However, for the quadratic time MMD, this may be inefficient when statistics are computed multiple times -- as in bootstrapping. Therefore, it is possible to initialize \shogunclass{CQuadraticTimeMMD} with a pre-computed \shogunclass{CCusotmKernel}. This kernel may be computed from any other kernel by simply passing the latter to the constructor of \shogunclass{CCusotmKernel}. This should be done whenever the kernel matrix fits into memory; it greatly improves performance. In bootstrapping, the kernel matrix only has to be permuted instead of being re-computed in every iteration. But there is also a (small) advantage for all other methods since \shogun{} computes kernel matrices in multiple threads.
 
 In contrast, \shogunclass{CLinearTimeMMD} should not be used with \shogunclass{CCusotmKernel}s since it does not even need all elements -- so pointless computations would be made. Also, \shogunclass{CLinearTimeMMD} might be changed to work on stream data only in the future.
+
+\subsubsection{Examples}
+There is a graphical python example which plots example data, alternative and null-distributions. 
+
+\begin{figure}\centering
+		\includegraphics{fig/statistical_testing/linear_time_mmd}
+		\caption{Screenshot of graphical python example for linear time MMD.}
+\end{figure}
+
+\begin{figure}\centering
+		\includegraphics{fig/statistical_testing/quadratic_time_mmd}
+		\caption{Screenshot of graphical python example for quadratic time MMD.}
+\end{figure}
