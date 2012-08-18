@@ -122,14 +122,31 @@ algorithm. It is prefixed with ``Gaussian'' because the probability model for
 $P(X=x|Y=k)$ for each $k$ is taken to be a multi-variate Gaussian distribution.
 Furthermore, each dimension of the feature vector $X$ is assumed to be
 independent. The ``Naive'' independence assumption enables us the learn the
-model very quickly, and is also the reason for its name. Although the
-independent assumption is usually considered to be too optimistic in reality,
-Naive Bayes sometimes works very well in some applications. For example, in
-email spam filtering, Naive Bayes\footnote{More specifically, the discrete
-	Naive Bayes is generally used in this scenario. The main difference with
-	Gaussian Naive Bayes is that a tabular instead of a parametric Gaussian
-	distribution is used to describe the likelihood $P(X=x|K=k)$.} is a very
-popular and widely used method.
+model by estimating the parameters for each feature dimension independently,
+thus the whole learning algorithm runs very quickly. And this is also the 
+reason for its name. However, this assumption can be very restrictive. In
+Fig.~\ref{fig:mc-gnb-fail}, we show a simple 2D example. There are 3 linearly
+separable classes. The scattered points are training samples with colors
+indicating their labels. The filled area indicate the hypothesis learned by
+the \shogunclass{CGaussianNaiveBayes}. The training samples are actually
+generated from three Gaussian distributions. But since the covariance for those
+Gaussian distributions are not diagonal (i.e. there are ``rotations''), the GNB
+algorithm cannot handle them properly.
+
+\begin{figure}
+    \centering\includegraphics[width=.5\linewidth]{fig/multiclass/gnb-fail-case}
+    \caption{Gaussian Naive Bayes fails to learn on a simple 2D example with 3
+    linearly separable classes.}
+    \label{fig:mc-gnb-fail}
+\end{figure}
+
+Although the independent assumption is usually considered to be too optimistic 
+in reality, Naive Bayes sometimes works very well in some applications. For 
+example, in email spam filtering, Naive Bayes\footnote{More specifically, the 
+    discrete Naive Bayes is generally used in this scenario. The main 
+    difference with Gaussian Naive Bayes is that a tabular instead of a 
+    parametric Gaussian distribution is used to describe the likelihood 
+    $P(X=x|K=k)$.} is a very popular and widely used method.
 
 This algorithm is closely related to the \emph{Gaussian Mixture Model} (GMM) learning
 algorithm. However, while GMM is an unsupervised learning algorithm, Gaussian
@@ -178,6 +195,9 @@ constructed with the argument \Verb|L2R_LR|. This model also include a
 regularization term of the $\ell_2$-norm of $\boldsymbol\beta$. If sparsity in
 $\boldsymbol\beta$ is needed, one can also use \Verb|L1R_LR|, which replaces
 the $\ell_2$-norm regularizer with a $\ell_1$-norm regularizer.
+
+Unfortunately, the logistic regression in \shogun{} does not support multiclass
+problem yet.
 
 \section{Reduction to Binary Problems}
 \label{sec:multiclass-reduction}
