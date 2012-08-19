@@ -297,7 +297,90 @@ Table~\ref{tab:ovr-vs-ovo}.
 \subsection{Error-Correcting Output Codes}
 
 \emph{Error-Correcting Output Codes} (ECOC) \citep{ECOC95,ECOCUnify} is a
-generalization of the One-vs-Rest and One-vs-One strategies.
+generalization of the One-vs-Rest and One-vs-One strategies. For example, we
+can represent the One-vs-Rest strategy with the following $K\times K$ coding 
+matrix, or a codebook:
+
+\[
+    \begin{bmatrix}
+    +1 & -1 & -1 & \ldots & -1 & -1 \\
+    -1 & +1 & -1 & \ldots & -1 & -1\\
+    -1 & -1 & +1 & \ldots & -1 & -1\\
+    \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+    -1 & -1 & -1 & \ldots & +1 & -1 \\
+    -1 & -1 & -1 & \ldots & -1 & +1
+    \end{bmatrix}
+\]
+
+Denote the codebook by $B$, there is one column of the codebook associated with
+each of the $K$ classes. For example, the code for class $1$ is
+$[+1,-1,-1,\ldots,-1]$. Each row of the codebook corresponds to a binary
+coloring of all the $K$ classes. For example, in the first row, the class $1$
+is colored as $+1$, while the rest of the classes are all colored as $-1$.
+Associated with each row, there is a binary classifier trained according to the
+coloring. For example, the binary classifier associated with the first row is
+trained by treating all the examples of class $1$ as positive examples, and all
+the examples of the rest of the classes as negative examples.
+
+In this special case, there are $K$ rows in the codebook. The number of rows in
+the codebook is usually called the \emph{code length}. As we can see, this
+codebook exactly describes how the One-vs-Rest strategy trains the binary
+sub-machines.
+
+A further generalization is to allow $0$-values in the codebook. A $0$ for a
+class $k$ in a row means we ignore (the examples of) class $k$ when training
+the binary classifiers associated with this row. With this generalization, we
+can also easily describes the One-vs-One strategy with a $\binom{K}{2}\times K$
+codebook:
+
+\[
+\begin{bmatrix}
++1     & -1     & 0      & \ldots & 0      & 0 \\
++1     & 0      & -1     & \ldots & 0      & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots & 0 \\
++1     & 0      & 0      & \ldots & -1     & 0 \\
+0      & +1     & -1     & \ldots & 0      & 0 \\
+\vdots & \vdots & \vdots &        & \vdots & 0 \\
+0      & 0      & 0      & \ldots & +1     & -1
+\end{bmatrix}
+\]
+
+Here each of the $\binom{K}{2}$ rows describes a binary classifier trained with
+a pair of classes. The resultant binary classifiers will be identical as those
+described by a One-vs-One strategy.
+
+Since $0$ is allowed in the codebook to ignore some classes, this kind of
+codebooks are usually called \emph{sparse codebook}s, while the codebooks with
+only $+1$ and $-1$ are usually called \emph{dense codebook}.
+
+In general case, we can specify any code length and fill the codebook
+arbitrarily. However, some rules should be followed:
+
+\begin{enumerate}
+    \item Each row must describe a \emph{valid} binary coloring. In other
+        words, both $+1$ and $-1$ should appear at least once in each row. Or
+        else a binary classifier cannot be obtained for this row.
+    \item It is good to avoid duplicated rows. There is generally no harm to
+        have duplicated rows, but the resultant binary classifiers are
+        completely identical provided the training algorithm for the binary
+        classifiers are deterministic. So this can be a waste of computational
+        resource.
+    \item Negative rows are also duplicated. Simply inversing the sign of a code
+        row does not produce a ``new'' code row. Because the resultant binary
+        classifier will simply be the negative classifier associated with the
+        original row.
+\end{enumerate}
+
+Though you can certainly generate your own codebook, it is usually easier to
+use the \shogun{} built-in procedures to generate codebook automatically. There
+are various codebook generators (called \emph{encoders}) in \shogun{}. However,
+before describing those encoders in details, let us notice that a codebook 
+only describes how the sub-machines are trained. But we still need a
+way to specify how the binary classification results of the sub-machines can be
+combined to get a multiclass classification result.
+
+Describe the name ECOC here, and describe the \shogun{} ECOC encoding/decoding
+pairs.
 
 \section{Tree-style Algorithms}
 \label{sec:multiclass-tree}
