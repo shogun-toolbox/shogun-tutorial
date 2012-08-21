@@ -340,7 +340,7 @@ codebook:
 \vdots & \vdots & \vdots & \ddots & \vdots & 0 \\
 +1     & 0      & 0      & \ldots & -1     & 0 \\
 0      & +1     & -1     & \ldots & 0      & 0 \\
-\vdots & \vdots & \vdots &        & \vdots & 0 \\
+\vdots & \vdots & \vdots &        & \vdots & \vdots \\
 0      & 0      & 0      & \ldots & +1     & -1
 \end{bmatrix}
 \]
@@ -378,6 +378,45 @@ before describing those encoders in details, let us notice that a codebook
 only describes how the sub-machines are trained. But we still need a
 way to specify how the binary classification results of the sub-machines can be
 combined to get a multiclass classification result.
+
+Review the codebook again: corresponding to each class, there is a column. We
+call the codebook column the (binary) \emph{code} for that class. For a new
+sample $x$, by applying the binary classifiers associated with each row
+successively, we get a prediction vector of the same length as the
+\emph{code}s. Deciding the multiclass label from the prediction vector (called
+\emph{decoding}) can be done by minimizing the \emph{distance} between the
+codes and the prediction vector. Different \emph{decoders} define different 
+choices of distance functions. For this reason, it is usually good to make the
+mutual distance between codes of different classes large. In this way, even
+though several binary classifiers make wrong predictions, the distance of
+the resultant prediction vector to the code of the \emph{true} class is likely
+to be still smaller than the distance to other classes. So correct results can
+still be obtained even when some of the binary classifiers make mistakes. This
+is the reason for the name \emph{Error-Correcting Output Codes}.
+
+In \shogun{}, encoding schemes are described by subclasses of
+\shogunclass{CECOCEncoder}, while decoding schemes are described by subclasses
+of \shogunclass{CECOCDecoder}. Theoretically, any combinations of
+encoder-decoder pairs can be used. Here we will introduce several common
+encoder/decoders in shogun.
+
+\begin{itemize}
+    \item \shogunclass{CECOCRandomDenseEncoder}: This encoder generate random
+        dense ($+1$/$-1$) codebooks and choose the one with the largest
+        \emph{minimum mutual distance} among the classes. The recommended code
+        length for this encoder is $10\log K$ \citep{ECOCUnify}.
+    \item \shogunclass{CECOCRandomSparseEncoder}: This is similar to the random
+        dense encoder, except that sparse ($+1$/$-1$/$0$) codebooks are
+        generated. The recommended code length for this encoder is $15\log K$
+        \citep{EscaleraPR09}.
+    \item \shogunclass{CECOCOVREncoder}, \shogunclass{CECOCOVOEncoder}: These
+        two encoders mimic the One-vs-Rest and One-vs-One strategies
+        respectively. They are implemented mainly for demonstrative purpose. 
+        When suitable decoders are used, the results will be
+        equivalent to the corresponding strategies, respectively.
+    \item \shogunclass{CECOCDiscriminantEncoder}
+    \item \shogunclass{CECOCForestEncoder}
+\end{itemize}
 
 Describe the name ECOC here, and describe the \shogun{} ECOC encoding/decoding
 pairs.
