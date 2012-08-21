@@ -122,14 +122,16 @@ For all MMD-based two-sample-tests, elements of kernel matrices of sample data h
 In contrast, \shogunclass{CLinearTimeMMD} should not be used with \shogunclass{CCusotmKernel}s since it does not even need all elements -- so pointless computations would be made. Also, \shogunclass{CLinearTimeMMD} might be changed to work on stream data only in the future.
 
 \subsubsection{Examples}
-There is a graphical python example which plots example data, alternative and null-distributions. 
+There are graphical python examples which plot example data, alternative and null-distributions. See figures \ref{fig:statistical_testing-quadratic_time_mmd} and \ref{fig:statistical_testing-linear_time_mmd} for a screenshot for quadratic and linear time MMD respectively.
 
 \begin{figure}\centering
 		\includegraphics{fig/statistical_testing/linear_time_mmd}
 		\caption{Screenshot of graphical python example for linear time MMD.}
+		\label{fig:statistical_testing-linear_time_mmd}
 \end{figure}
 
 \begin{figure}\centering
 		\includegraphics{fig/statistical_testing/quadratic_time_mmd}
 		\caption{Screenshot of graphical python example for quadratic time MMD.}
+		\label{fig:statistical_testing-quadratic_time_mmd}
 \end{figure}
