@@ -69,6 +69,8 @@ Then, any threshold and p-value can be computed using the gamma distribution in 
 
 To use that method for testing, use \texttt{set\_null\_approximation\_method(HSIC\_GAMMA)}, to be found in \shogunclass{CHSIC}.
 
+\subsubsection{Kernel Selection}
+See section \ref{sec:statistical_tests-mmd-kernel_selection}. The same principle may be applied for HSIC-based tests. Note that since there is a kernel for each distribution, two kernel parameters have to be selected. Using the described median heuristic also leads to good results in some cases, as mentioned in \citep{Gretton2008d}.
 
 \subsubsection{Example}
 There is a graphical python example which plots example data, alternative and null-distributions. See figure \ref{fig:statistical_testing-hsic}.

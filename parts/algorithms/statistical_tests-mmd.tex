@@ -119,7 +119,23 @@ To use that method for testing, use \texttt{set\_null\_approximation\_method(MMD
 \label{sec:quadratic_mmd_precomputed_kernel}
 For all MMD-based two-sample-tests, elements of kernel matrices of sample data have to be used. By default, all computations are done \emph{in-place} when possible, which means that the underlying kernel is evaluated on the fly (There are exceptions, when the matrix has to be stored, for example in order so solve Eigenvalue problems). However, for the quadratic time MMD, this may be inefficient when statistics are computed multiple times -- as in bootstrapping. Therefore, it is possible to initialize \shogunclass{CQuadraticTimeMMD} with a pre-computed \shogunclass{CCusotmKernel}. This kernel may be computed from any other kernel by simply passing the latter to the constructor of \shogunclass{CCusotmKernel}. This should be done whenever the kernel matrix fits into memory; it greatly improves performance. In bootstrapping, the kernel matrix only has to be permuted instead of being re-computed in every iteration. But there is also a (small) advantage for all other methods since \shogun{} computes kernel matrices in multiple threads.
 
-In contrast, \shogunclass{CLinearTimeMMD} should not be used with \shogunclass{CCusotmKernel}s since it does not even need all elements -- so pointless computations would be made. Also, \shogunclass{CLinearTimeMMD} might be changed to work on stream data only in the future.
+In contrast, \shogunclass{CLinearTimeMMD} should not be used with \shogunclass{CCusotmKernel}s since it does not even need all elements -- so pointless computations would be made. Also, \shogunclass{CLinearTimeMMD} might be c
+
+\subsubsection{Kernel Selection}
+\label{sec:statistical_tests-mmd-kernel_selection}
+Kernel selection for MMD-based two-sample tests is an ongoing subject of research. In the near future, recent results on this topic will be implemented into \shogun{}. In the meantime, a good heuristic to start with, when using a Gaussian kernel as implemented in \shogunclass{CGaussianKernel}, is to use the median distance in the underlying data as kernel bandwidth. This way, the kernel captures at least the scaling of underlying data. In many cases, this leads to usable first results, however, the method may badly fail if signal is hidden at another length scale than the one of the overall data. The method is mentioned in \citep[Appendix C]{Gretton2012}.
+
+In order to do this, note that  \shogun{}'s Gaussian kernel implementation uses a different parametrization as most other literature:
+\begin{align*}
+k(x,x')=\exp\left( \frac{||x-x'||_2^2}{\tau}\right)
+\end{align*}
+where $\tau$ is the width that is passed to the constructor of \shogunclass{CGaussianKernel}. In order to translate a median distance $d$ to this kernel, simply pass $\tau=d^2$.
+
+\shogun{} implements classes that can compute median distances. Create an instance of the class \shogunclass{CEulideanDistance}, call the method \texttt{distance\_matrix} to compute all pairwise distances of passed data. Then, use the method \texttt{matrix\_median} of  \shogunclass{CStatistics} in order to compute the median of all elements in the matrix. Store this distance and pass it to the Gaussian kernel as described above.
+
+Note that the median is a very stable statistic, therefore, it is not necessary to compute all pairwise distances. A subset of a few hundred points is sufficient. This can be done via setting a subset to the instance of \shogunclass{CFeatures} that holds the data. To do so, create a random index permutation via calling method \texttt{randperm\_vec} of class \shogunclass{CMath}, and only keep the $n$ first indices where $n$ is the number of distances that should be computed. Call \texttt{add\_subset} on the instance of \shogunclass{CFeatures} that holds the data and give the indices as parameter. Then, this instance can be passed to \shogunclass{CEulideanDistance} as described above. Distances will only be computed for specified indices. Once the distance matrix is computed, call \texttt{remove\_subset} to reset the original state of the data.
+
+The whole procedure is included in all python examples, including the graphical ones.
 
 \subsubsection{Examples}
 There are graphical python examples which plot example data, alternative and null-distributions. See figures \ref{fig:statistical_testing-quadratic_time_mmd} and \ref{fig:statistical_testing-linear_time_mmd} for a screenshot for quadratic and linear time MMD respectively.
