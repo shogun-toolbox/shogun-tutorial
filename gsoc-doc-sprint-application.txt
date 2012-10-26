@@ -59,14 +59,15 @@ Sergey got involved in the GSoC 2011 and since then a core contributor touching 
 
 Heiko Strathmann - http://www.herrstrathmann.de - UK (German nationality) - Full travel support
 
-Heiko also got involved in the GSoC 2011 and since then a core contributor. He successfully completed GSoC 2011/2012. During the GSoC 2012, Heiko wrote an in-depth documentation for his project for the shogun-tuorial. Since he is persuading an academic career in machine learning, he knows many of shogun's algorithms in detail and has experience in writing scientific documentation.
+Heiko also got involved in the GSoC 2011 and since then a core contributor. He successfully completed GSoC 2011/2012. During the GSoC 2012, Heiko wrote an in-depth documentation for his project for the shogun-tuorial. He also documented  his acivity on his blog http://herrstrathmann.de/google-summer-of-code-blog
+Since he is persuading an academic career in machine learning, he knows many of shogun's algorithms in detail and has experience in writing scientific documentation.
 
 Viktor Gal <wiking@maeth.com> - Belgium - Full travel support
 
-Viktor had started developing Shogun before GSoC 2012 and have successfully carried all the tasks on his project. 
+Viktor had started developing for Shogun in early 2012 and has successfully completed GSoC 2012.
 Viktor focuses on computer vision applications of machine learning and extends Shogun through his research.
 
 Fernando J. Iglesias García <fernando.iglesiasg@gmail.com>
 
-Fernando joined our team in 2012 and currently helps us to support project. He has successfully completed GSoC 2012
-on prospective structured output learning field and can help us to extend its documentation further.
+Fernando started contributing at the beginning of 2012 and sucessfully completed GSoC 2012, which he documented in his blog http://iglesiashogun.wordpress.com/
+He is interested in machine learning applications to robotics and aims at becoming a successful researcher in this field.
