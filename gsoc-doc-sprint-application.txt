@@ -57,11 +57,11 @@ Sergey Lisitsyn <lisitsyn.s.o@gmail.com> - Russia - Full travel support
 
 Sergey got involved in the GSoC 2011 and since then a core contributor touching all areas of shogun. He has successfully completed GSoC 2011/2012 and it was him who suggested to have a documentation sprint during GSoC 2012. He went ahead and documented his 2012 project in the shogun-tutorial.
 
-Heiko Strathmann - http://www.herrstrathmann.de - UK/Germany - Full travel support
+Heiko Strathmann - http://www.herrstrathmann.de - UK (German nationality) - Full travel support
 
 Heiko also got involved in the GSoC 2011 and since then a core contributor. He successfully completed GSoC 2011/2012. During the GSoC 2012, Heiko wrote an in-depth documentation for his project for the shogun-tuorial. Since he is persuading an academic career in machine learning, he knows many of shogun's algorithms in detail and has experience in writing scientific documentation.
 
-Viktor Gal <wiking@maeth.com> - Full travel support
+Viktor Gal <wiking@maeth.com> - Belgium - Full travel support
 
 Viktor had started developing Shogun before GSoC 2012 and have successfully carried all the tasks on his project. 
 Viktor focuses on computer vision applications of machine learning and extends Shogun through his research.
