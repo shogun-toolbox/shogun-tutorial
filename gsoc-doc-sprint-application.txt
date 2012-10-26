@@ -67,7 +67,7 @@ Viktor Gal <wiking@maeth.com> - Belgium - Full travel support
 Viktor had started developing for Shogun in early 2012 and has successfully completed GSoC 2012.
 Viktor focuses on computer vision applications of machine learning and extends Shogun through his research.
 
-Fernando J. Iglesias García - Sweden, (Spanish nationality) - <fernando.iglesiasg@gmail.com>
+Fernando J. Iglesias García - Sweden, (Spanish nationality) - <fernando.iglesiasg@gmail.com> - Full travel support
 
 Fernando started contributing at the beginning of 2012 and sucessfully completed GSoC 2012, which he documented in his blog http://iglesiashogun.wordpress.com/
 He is interested in machine learning applications to robotics and aims at becoming a successful researcher in this field.
