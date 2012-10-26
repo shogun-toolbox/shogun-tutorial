@@ -64,8 +64,9 @@ Since he is persuading an academic career in machine learning, he knows many of 
 
 Viktor Gal <wiking@maeth.com> - Belgium - Full travel support
 
-Viktor had started developing for Shogun in early 2012 and has successfully completed GSoC 2012.
-Viktor focuses on computer vision applications of machine learning and extends Shogun through his research.
+Viktor has started developing for Shogun in early 2012 followed by successfully completing GSoC 2012.
+Viktor is continuously extending Shogun as part of his PhD, in which he is
+working on various machine learning algorithms and their applications in machine vision.
 
 Fernando J. Iglesias García - Sweden, (Spanish nationality) - <fernando.iglesiasg@gmail.com>
 
