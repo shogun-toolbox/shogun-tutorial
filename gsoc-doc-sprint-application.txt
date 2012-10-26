@@ -1,4 +1,3 @@
-
 The following is the information we need to know from the form. All fields should be completed.
 * Required
 
@@ -46,14 +45,22 @@ Soeren started the project in 1999 and has since being the org admin during GSoC
 
 Sergey Lisitsyn <lisitsyn.s.o@gmail.com> - Russia - Full travel support
 
-Sergey has been involved since the beginning of GSoC 2011. Starting as a GSoC 2011 student he has become a core contributor touching all areas of shogun. He has successfully completed GSoC 2011/2012 and it was him who suggested to have a documentation sprint during GSoC 2012. 
+Sergey has been involved since the beginning of GSoC 2011. 
+Starting as a GSoC 2011 student he has become a core contributor touching all areas of shogun. 
+He has successfully completed GSoC 2011/2012 and it was him 
+who suggested to have a documentation sprint during GSoC 2012.
 
 Heiko Strathmann - http://www.herrstrathmann.de - UK/Germany - Full travel support
 
-Like Sergey, Heiko got involved in 2011 as GSoC student is now a core contributor. He is persuading an academic career 
+Like Sergey, Heiko got involved in 2011 as GSoC student is now a core contributor. 
+He is persuading an academic career in London, UK.
 
 Viktor Gal <wiking@maeth.com> - Full travel support
 
-
+Viktor had started developing Shogun before GSoC 2012 and have successfully carried all the tasks on his project. 
+Viktor focuses on computer vision applications of machine learning and extends Shogun through his research.
 
 Fernando J. Iglesias García <fernando.iglesiasg@gmail.com>
+
+Fernando joined our team in 2012 and currently helps us to support project. He has successfully completed GSoC 2012
+on prospective structured output learning field and can help us to extend its documentation further.
