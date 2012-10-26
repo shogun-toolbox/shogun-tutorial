@@ -1,0 +1,59 @@
+
+The following is the information we need to know from the form. All fields should be completed.
+* Required
+
+Is this a project or an individual application? *
+[X] Project
+ Individual
+
+What is your name or the name of the group you are submitting your information on behalf of? *
+Shogun Machine Learning Toolbox
+
+
+What is the email address you'd like to use for contact about this application? *
+Soeren.Sonnenburg@gmail.com
+
+What is the phone number you'd like to use for contact about this application? *
++491792384134
+
+Are you, or the nominated project, associated with a current or past GSoC Project? *
+[X] Yes
+ No
+ Other: 
+
+Individuals only : Please outline in brief detail why you would like to attend the 2012 GSoC Doc Camp.
+
+
+Individuals only : Please provide a brief outline of your motivations and experience with free documentation.
+
+
+Individuals only : Please indicate which country (and state if appropriate) you will be traveling from and if you require full or partial travel assistance.
+
+
+Projects only : Please outline in brief detail how the nominated project would benefit from attending the 2012 GSoC Doc Camp.
+
+https://github.com/shogun-toolbox/shogun-tutorial
+
+
+Projects only : Propose a topic of the Book Sprint and outline in a few sentences what you would like to cover.
+We intend to document the shogun machine learning toolbox, i.e., give an introduction into machine learning and explain each of the many machine learning algorithms implemented in shogun: For each algorithm we intend to introduce the scientific background, describe its prerequisites and the situations when it can or should be used. Algorithms will be ordered by the class of the algorithms, i.e., classification algorithms, regression algorithms, structured output learning etc and a running example will be devoted to each class. For example, classification algorithms could be illustrated utilizing the task to classify spam vs. non-spam or to recognize digits.
+
+Projects only : List up to 5 individuals that you would like to attend. Please provide the country (and state if appropriate) they would travel from, and one or two lines about why each person is a good candidate. Indicate those who would require full or partial travel assistance.
+
+Soeren Sonnenburg - http://sonnenburgs.de/soeren - Germany - Full travel support
+
+Soeren started the project in 1999 and has since being the org admin during GSoC 2011/2012. He has a strong machine learning background and publication record. His PhD thesis and related publications can be used as input for certain parts of the documentation.
+
+Sergey Lisitsyn <lisitsyn.s.o@gmail.com> - Russia - Full travel support
+
+Sergey has been involved since the beginning of GSoC 2011. Starting as a GSoC 2011 student he has become a core contributor touching all areas of shogun. He has successfully completed GSoC 2011/2012 and it was him who suggested to have a documentation sprint during GSoC 2012. 
+
+Heiko Strathmann - http://www.herrstrathmann.de - UK/Germany - Full travel support
+
+Like Sergey, Heiko got involved in 2011 as GSoC student is now a core contributor. He is persuading an academic career 
+
+Viktor Gal <wiking@maeth.com> - Full travel support
+
+
+
+Fernando J. Iglesias García <fernando.iglesiasg@gmail.com>
