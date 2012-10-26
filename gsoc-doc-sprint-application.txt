@@ -31,27 +31,29 @@ Individuals only : Please indicate which country (and state if appropriate) you 
 
 Projects only : Please outline in brief detail how the nominated project would benefit from attending the 2012 GSoC Doc Camp.
 
-https://github.com/shogun-toolbox/shogun-tutorial
+Shogun has a huge code base (about 262,000 LoC in over 560 classes). While both, a large doxygen reference documentation/a minimal tutorial and over 1400 basic examples to using shogun exists, its accessibility to new-comers is hard: Even though there are a lot of code examples available, these only cover basic cases. In addition various state-of-art machine learning algorithms are implemented in Shogun. However, they require expert knowledge to be used (meaning and influence of parameters) and it sometimes could be hard for a user to choose the right algorithm for his needs.
+A large reference documentation exists, but in many cases it is quite technical and more related to the internal framework than to serve an end-user purpose. What is missing is an all-in-one documentation in the form of a book like manual, which would take a user by the hand and guide him through all concepts and explains what is (not) possible with shogun.
+
+For that reason this years GSoC students decided to have a doc sprint during GSoC 2012. These students were all successful participants of last or this years GSoC and have become core contributors to shoguns code base. Without even knowing about GSoC Doc Camp they started creating a tutorial that currently covers three classes of algorithms, multi-task and multi-class algorithms and statistical tests. The current book-like documentation merely created in the doc-sprint can be seen here https://github.com/shogun-toolbox/shogun-tutorial/raw/master/shogun_tutorial-26Oct2012.pdf .
+
+Note that we intended to have a GSoC 2012 project on improving documentation and examples, however after a brief chat with Carol, we realized that such project would be borderline GSoC at best and dropped it. Therefore, the doc camp is an amazing opportunity for us to focus on a manual with highly motivated individuals working on it.
+
+In summary, the benefits from attending 2012 GSoC Doc Camp would be:
+- An all-in-one manual that in turn would increase shogun's popularity and user base to not only domain experts.
+- Increase team motivation within shogun since students would meet face to face.
+- It would increase shogun's chances of becoming the de-facto standard toolbox in machine learning.
 
 
 Projects only : Propose a topic of the Book Sprint and outline in a few sentences what you would like to cover.
-The Shogun Machine Learning Toolbox offers a lot of powerful features. However, for new users, it might hard to get started. Even users from the scientific community sometimes struggle using it.
-There are a lot of code examples available, but these only cover basic cases. Interface documentation exists, but is based on source-code comments. These are in many cases quite technical and more related to the internal framework than for end-user purpose. Documentation on the website is partly outdated.  What is missing is an all-in-one documentation which would take a user by the hand and guide him through all concepts and explains what is (not) possible with shogun.
-
-This project aims to produce a good documentation of the project in the form of a book like manual.
 We want to give a brief introduction into machine learning in general, and in particular want to explain algorithms implemented in shogun. For each algorithm we intend to introduce formal background, describe prerequisites, and point out the situations when it can or should be used. 
 
-In addition, we want to illustrate how to use algorithm implementations in shogun in practice. For this, we aim to produce a real-life example for each algorithm and provide a step-by-step explanation. We plan to use public available and widely known datasets for this in order to maximize relevance.
-These examples will be ordered by the class of the algorithms, i.e. classification, regression, clustering, etc. For example, classification algorithms could be illustrated utilizing the task to classify spam vs. non-spam or to recognize digits.
-
-We already started a book like manual for shogun during GSoC 2012. Some of the students documented their projects in the above described form. See https://github.com/shogun-toolbox/shogun-tutorial
-We wanted to do a GSoC 2012 project on this, however, as GSoC is about coding this was not allowed. Therefore, the docsprint is an amazing opportunity for us to focus on a manual.
+In addition, we want to illustrate how to use algorithm implementations in shogun in practice. For this, we aim to produce a real-life example for each algorithm and provide a step-by-step explanation. We plan to use public available and widely known datasets for this in order to maximize relevance.  These examples will be ordered by the class of the algorithms, i.e. classification, regression, clustering, etc. For example, classification algorithms could be illustrated utilizing the task to classify spam vs. non-spam or to recognize digits.  Finally, shogun offers interfaces to quite a number of different programming languages and external libraries. This results in a non-trivial compile and installation process. In the book, we want to include an installation section detailing on how to get shogun to run in different contexts in terms of interfaces, OS, and external libraries. This would make it much easier for first time users to come to grips with shogun.
 
 Projects only : List up to 5 individuals that you would like to attend. Please provide the country (and state if appropriate) they would travel from, and one or two lines about why each person is a good candidate. Indicate those who would require full or partial travel assistance.
 
 Soeren Sonnenburg - http://sonnenburgs.de/soeren - Germany - Full travel support
 
-Soeren started the project in 1999 and has since being the org admin during GSoC 2011/2012. He has a strong machine learning background and publication record. His PhD thesis and related publications can be used as input for certain parts of the documentation.
+Soeren started the project in 1999 and has since been stayed around. He has been pushing shogun into GSoC 2011/2012 and served as an org admin. He has a strong machine learning background and publication record. His PhD thesis and related publications can be directly used as input for certain parts of the documentation.
 
 Sergey Lisitsyn <lisitsyn.s.o@gmail.com> - Russia - Full travel support
 
@@ -59,7 +61,8 @@ Sergey got involved in the GSoC 2011 and since then a core contributor touching 
 
 Heiko Strathmann - http://www.herrstrathmann.de - UK (German nationality) - Full travel support
 
-Heiko also got involved in the GSoC 2011 and since then a core contributor. He successfully completed GSoC 2011/2012. During the GSoC 2012, Heiko wrote an in-depth documentation for his project for the shogun-tuorial. He also documented  his acivity on his blog http://herrstrathmann.de/google-summer-of-code-blog
+Heiko also got involved in the GSoC 2011 and since then a core contributor. He successfully completed GSoC 2011/2012. During the GSoC 2012, Heiko wrote an
+in-depth documentation for his project for the shogun-tutorial. He also documented  his activity on his blog http://herrstrathmann.de/google-summer-of-code-blog
 Since he is persuading an academic career in machine learning, he knows many of shogun's algorithms in detail and has experience in writing scientific documentation.
 
 Viktor Gal <wiking@maeth.com> - Belgium - Full travel support
@@ -70,5 +73,5 @@ working on various machine learning algorithms and their applications in machine
 
 Fernando J. Iglesias García - Sweden, (Spanish nationality) - <fernando.iglesiasg@gmail.com> - Full travel support
 
-Fernando started contributing at the beginning of 2012 and sucessfully completed GSoC 2012, which he documented in his blog http://iglesiashogun.wordpress.com/
+Fernando started contributing at the beginning of 2012 and csucessfully completed GSoC 2012, which he documented in his blog http://iglesiashogun.wordpress.com/
 He is interested in machine learning applications to robotics and aims at becoming a successful researcher in this field.
