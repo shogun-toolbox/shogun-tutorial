@@ -47,13 +47,13 @@ In summary, the benefits from attending 2012 GSoC Doc Camp would be:
 Projects only : Propose a topic of the Book Sprint and outline in a few sentences what you would like to cover.
 We want to give a brief introduction into machine learning in general, and in particular want to explain algorithms implemented in shogun. For each algorithm we intend to introduce formal background, describe prerequisites, and point out the situations when it can or should be used. 
 
-In addition, we want to illustrate how to use algorithm implementations in shogun in practice. For this, we aim to produce a real-life example for each algorithm and provide a step-by-step explanation. We plan to use public available and widely known datasets for this in order to maximize relevance.  These examples will be ordered by the class of the algorithms, i.e. classification, regression, clustering, etc. For example, classification algorithms could be illustrated utilizing the task to classify spam vs. non-spam or to recognize digits.  Finally, shogun offers interfaces to quite a number of different programming languages and external libraries. This results in a non-trivial compile and installation process. In the book, we want to include an installation section detailing on how to get shogun to run in different contexts in terms of interfaces, OS, and external libraries. This would make it much easier for first time users to come to grips with shogun.
+In addition, we want to illustrate how to use the algorithms implementations in shogun in practice. To this end, we aim to produce a real-life example for each algorithm and provide a step-by-step explanation. We plan to use publicly available and widely known datasets in order to maximize relevance.  These examples will be ordered by the class of the algorithms, i.e. classification, regression, clustering, etc. For example, classification algorithms could be illustrated utilizing the task to classify spam vs. non-spam or to recognize digits.  Finally, shogun offers interfaces to quite a number of different programming languages and external libraries. This results in a non-trivial compile and installation process. In the book, we want to include an installation section detailing on how to get shogun to run in different contexts in terms of interfaces, OS, and external libraries. This would make it much easier for first time users to come to grips with shogun.
 
 Projects only : List up to 5 individuals that you would like to attend. Please provide the country (and state if appropriate) they would travel from, and one or two lines about why each person is a good candidate. Indicate those who would require full or partial travel assistance.
 
 Soeren Sonnenburg - http://sonnenburgs.de/soeren - Germany - Full travel support
 
-Soeren started the project in 1999 and has since been stayed around. He has been pushing shogun into GSoC 2011/2012 and served as an org admin. He has a strong machine learning background and publication record. His PhD thesis and related publications can be directly used as input for certain parts of the documentation.
+Soeren started the project in 1999 and has since stayed around. He has been pushing shogun into GSoC 2011/2012 and served as an org admin. He has a strong machine learning background and publication record. His PhD thesis and related publications can be directly used as input for certain parts of the documentation.
 
 Sergey Lisitsyn <lisitsyn.s.o@gmail.com> - Russia - Full travel support
 
@@ -73,5 +73,5 @@ working on various machine learning algorithms and their applications in machine
 
 Fernando J. Iglesias García - Sweden, (Spanish nationality) - <fernando.iglesiasg@gmail.com> - Full travel support
 
-Fernando started contributing at the beginning of 2012 and csucessfully completed GSoC 2012, which he documented in his blog http://iglesiashogun.wordpress.com/
+Fernando started contributing at the beginning of 2012 and successfully completed GSoC 2012, which he documented in his blog http://iglesiashogun.wordpress.com/
 He is interested in machine learning applications to robotics and aims at becoming a successful researcher in this field.
