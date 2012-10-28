@@ -28,9 +28,9 @@ There are two different kinds of errors in hypothesis testing:
 \item A \emph{type I error} is made when $H_0: p=q$ is wrongly rejected. That is, the tests says that the samples are from different distributions when they are not.
 \item A \emph{type II error} is made when $H_A: p=q$ is wrongly accepted. That is, the tests says that the samples are from same distributions when they are from the same.
 \end{itemize}
-A so called \emph{consistent} test achieves zero type 2 error for a fixed type 1 error.
+A so called \emph{consistent} test achieves zero type II error for a fixed type I error.
 
-To decide whether to reject $H_0$, one could set a threshold, say at the 95\% quantile of the null-distribution, and reject $H_0$ when the test statistic lies below that threshold. This means that the chance that the samples were generated under $H_0$ are 5\%. We call this number the test power $\alpha$ (in this case $\alpha=0.05$). It is an upper bound on the probability for a type 1 error. An alternative way is simply to compute the quantile of the test statistic in the null-distribution, the so-called \emph{p-value}, and to compare the p-value against a desired test power, say $\alpha=0.05$, by hand. The advantage of the second method is that one not only gets a binary answer, but also an upper bound on the type 1 error.
+To decide whether to reject $H_0$, one could set a threshold, say at the 95\% quantile of the null-distribution, and reject $H_0$ when the test statistic lies below that threshold. This means that the chance that the samples were generated under $H_0$ are 5\%. We call this number the test power $\alpha$ (in this case $\alpha=0.05$). It is an upper bound on the probability for a type I error. An alternative way is simply to compute the quantile of the test statistic in the null-distribution, the so-called \emph{p-value}, and to compare the p-value against a desired test power, say $\alpha=0.05$, by hand. The advantage of the second method is that one not only gets a binary answer, but also an upper bound on the type I error.
 
 In order to construct a two-sample test, the null-distribution of the test statistic has to be approximated. One way of doing this for any two-sample test is called \emph{bootstrapping}:
 \begin{algorithm}
@@ -54,17 +54,23 @@ Output is:
 \label{alg:bootstrapping}
 \end{algorithm}
 
-Bootstrapping is a useful technique to create ground-truth samples for a null-distribution. However, it is rather costly because the statistic has to be re-computed for every sample.
+Bootstrapping is a useful technique to create ground-truth samples from a null-distribution. However, it is rather costly because the statistic has to be re-computed for every sample. More details will be given when individual tests are described.
 
+\subsection*{Interface for Statistical Testing}
 \shogun{} implements statistical testing in the abstract class \shogunclass{CTestStatistic}.
 \begin{itemize}
 \item Test statistics can be computed with \texttt{compute\_statistic}.
 \item P-values for a given statistic can be computed via \texttt{compute\_p\_value}. Results depend on method that is set for approximating null-distribution.
 \item Statistic thresholds for a given p-value can be computed via \texttt{compute\_threshold}. Results depend on method that is set for approximating null-distribution.
-\item A number of samples can be drawn from the null-distribution using bootstrapping via \texttt{bootstrap\_null}.
+\item A number of samples can be drawn from the null-distribution using bootstrapping via \texttt{bootstrap\_null}. This will call \texttt{compute\_statistic} a certain number of times while underlying data is modified in such way that the null hypothesis $H_0:p=q$ is true.
+\item A complete two-sample test can be computed using \texttt{perform\_test}. There are two different versions of this method:
+\begin{itemize}
+\item  One without parameters which computes the statistic and returns a p-value for it. This p-value can be used to (not) reject the null hypothesis.
+\item One which has a test level $\alpha$ as a parameter and returns \texttt{true} if the null hypothesis is rejected and \texttt{false} otherwise. Obviously, this method is just a simple wrapper of the above one.
+\end{itemize}
 \end{itemize}
 
-An important class of hypothesis tests are the \emph{two-sample-tests}, which will be defined in the following.
+The \texttt{perform\_test} methods are convenience wrappers for \texttt{compute\_statistic} and \texttt{compute\_p\_value}. However, in certain cases, it might be possible to compute statistic and p-value in the same loop which is more efficient. In subclasses of \shogunclass{CTestStatistic}, the first one might be overwritten in order to implement this -- if possible. See class documentations for availability. If an  efficient implementation is not existent, \texttt{perform\_test} simply is a wrapper for  \texttt{compute\_statistic} and \texttt{compute\_p\_value}.
 
 \input{parts/algorithms/statistical_tests-mmd}
 \input{parts/algorithms/statistical_tests-hsic}
