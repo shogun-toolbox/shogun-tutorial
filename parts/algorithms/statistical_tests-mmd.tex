@@ -9,6 +9,7 @@
 
 \section{Two-Sample-Testing with the Maximum Mean Discrepancy}
 \label{sec:mmd_into}
+An important class of hypothesis tests are the \emph{two-sample tests}, which will be defined in the following.
 In two-sample testing, one tries to find out whether to sets of samples come from different distributions. Given two probability distributions $p,q$ and i.i.d.\ samples $X=\{x_i\}_{i=1}^m\subseteq \mathbb{R}^d\sim p$ and $Y=\{y_i\}_{i=1}^n\subseteq \mathbb{R}^d\sim p$, the two sample test distinguishes the hypothesises
 \begin{align*}
 H_0: p=q\\
@@ -29,7 +30,7 @@ use the MMD for two-sample testing. \shogun{} offers two types of test statistic
 \subsection{Quadratic Time MMD Statistic}
 \label{sec:mmd_quadratic}
 We now describe the quadratic time MMD, as described in \citep[Lemma
-6]{Gretton2012}, which is implemented in \shogun{}. All methods in this section are implemented in \shogunclass{CQuadraticTimeMMD}.
+6]{Gretton2012}, which is implemented in \shogun{}. All methods in this section are implemented in \shogunclass{CQuadraticTimeMMD}, which accepts any type of \shogun{} features.
 
 An unbiased estimate for expression \ref{eqn:mmd_population} can be obtained by estimating expected values with sample means
 \begin{align*}
@@ -46,7 +47,7 @@ A biased estimate would be
 To compute statistic, use \texttt{compute\_statistic}. To decide which statistic to use, use \texttt{set\_statistic\_type} with arguments \texttt{BIASED} or \texttt{UNBIASED} to activate this statistic type. Note that some methods for approximating the null-distribution only work with one of both types. Both statistics' computational costs are quadratic both in time and space. Note that the method returns $m\mmd_b^2[\mathcal{F},X,Y]$ since null distribution approximations work on $m$ times null distribution.
 
 \subsubsection{Bootstrapping}
-As for any two-sample test in \shogun{}, bootstrapping can be used to approximate the null-distribution with both types of quadratic MMD statistic. This results in a consistent, but slow test. Note that for each sample, the quadratic time estimate has to be re-computed. The number of samples to take is the only parameter. As a rule of thumb, use at least 250 samples.
+As for any two-sample test in \shogun{}, bootstrapping can be used to approximate the null-distribution with both types of quadratic MMD statistic. This results in a consistent, but slow test. Note that for each sample, the quadratic time estimate has to be re-computed. The number of samples to take is the only parameter. If unsure what to do, bootstrapping is the recommended way of constructing a test. As a rule of thumb, use at least 250 samples.
 See \texttt{bootstrap\_null} in \shogunclass{CTwoDistributionsTestStatistic} and \shogunclass{CKernelTwoSampleTestStatistic}. Strongly consider using pre-computed kernel matrices as described in section \ref{sec:quadratic_mmd_precomputed_kernel}.
 
 \subsubsection{Spectrum Approximation}
@@ -67,8 +68,10 @@ in expression \ref{eqn:quadratic_mmd_spectrum} can be easily sampled. \shogun{}'
 \end{itemize}
 If the kernel matrices are diagonal dominant, this method is likely to fail. For that and more details, see the original paper. Computational costs are much lower than bootstrapping, which is the only consistent alternative. Since Eigenvalues of the gram matrix has to be computed, costs are in $\mathcal{O}(m^3)$.
 
-To get a number of samples, use \texttt{sample\_null\_spectrum}; to use that method for testing, use \texttt{set\_null\_approximation\_method(MMD2\_SPECTRUM)}. Both methods are to be found in \shogunclass{CQuadraticTimeMMD}. Important: This method only works with the biased statistic.
+To get a number of samples, use \texttt{sample\_null\_spectrum}; to use that method for testing, use \texttt{set\_null\_approximation\_method(MMD2\_SPECTRUM)}. Both methods are to be found in \shogunclass{CQuadraticTimeMMD}. \textbf{Important:} This method only works with the biased statistic.
+
 \subsubsection{Gamma Approximation}
+\todo{Gamma Approximation: Merge with compute statistic in code and document! H.S.}
 Another method for approximating the null-distribution is by matching the first two moments of a gamma-distribution and then use that. This is not consistent, but usually also gives good results while being very fast. However, there are distributions where the method fails; therefore, the type I error should always be monitored. Described in \citep{Gretton2012b}. It uses
 \begin{align}
 \label{eqn:quadratic_mmd_gamma}
@@ -82,7 +85,7 @@ where
 
 Then, any threshold and p-value can be computed using the gamma distribution in expression \ref{eqn:quadratic_mmd_gamma}. Computational costs are in $\mathcal{O}(m^2)$.
 
-To use that method for testing, use \texttt{set\_null\_approximation\_method(MMD2\_GAMMA)}, to be found in \shogunclass{CQuadraticTimeMMD}. Important: This method only works with the biased statistic.
+To use that method for testing, use \texttt{set\_null\_approximation\_method(MMD2\_GAMMA)}, to be found in \shogunclass{CQuadraticTimeMMD}. \textbf{Important:} This method only works with the biased statistic.
 
 
 \subsection{Linear Time MMD Statistic}
@@ -90,20 +93,30 @@ To use that method for testing, use \texttt{set\_null\_approximation\_method(MMD
 We now describe the linear time MMD, as described in \citep[Section
 6]{Gretton2012}, which is implemented in \shogun{}. All methods in this section are implemented in \shogunclass{CLinearTimeMMD}.
 
-An fast, unbiased estimate for expression \ref{eqn:mmd_population} which still uses all available data can be obtained by dividing data into two parts and then compute
+A fast, unbiased estimate for expression \ref{eqn:mmd_population} which still uses all available data can be obtained by dividing data into two parts and then compute
 
 \begin{align*}
 \mmd_l^2[\mathcal{F},X,Y]=\frac{1}{m_2}\sum_{i=1}^{m_2} k(x_{2i},x_{2i+1})+k(y_{2i},y_{2i+1})-k(x_{2i},y_{2i+1})-
   k(x_{2i+1},y_{2i})
 \end{align*}
-where $ m_2=\lfloor\frac{m}{2} \rfloor$. This statistic is interesting for large scale tests since its computational costs are linear in the number of samples; and the space costs are constant -- it is therefore very suitable for large amounts of streaming data. To compute statistic, use \texttt{compute\_statistic}.
+where $ m_2=\lfloor\frac{m}{2} \rfloor$. While the above expression assumes that $m$ data are available from each distribution, the statistic in general works in an online setting where features are obtained one by one. Since only pairs of four points are considered at once, this allows to compute it on data streams. In addition, the computational costs are linear in the number of samples that are considered from each distribution. These two properties make the linear time MMD very applicable for large scale two-sample tests. In theory, any number of samples can be processed -- time is the only limiting factor.
+
+\subsubsection*{How to Pass Data to \shogunclass{CLinearTimeMMD}}
+To account for this streaming nature of the linear time MMD, the implementation in \shogun{} is based on the streaming framework around the class \shogunclass{CStreamingFeatures}. The latter basically implements an interface to get data one by one or in larger blocks. See section \ref{sec:shogun_objects-features-streaming} for more details on the streaming interface. If \shogunclass{CLinearTimeMMD} should be used on non-streaming data, such as for example \shogunclass{CDenseFeatures} as described in section \ref{sec:shogun_objects-features-dense}, simply construct an instance of \shogunclass{CStreamingFeatures} from these. For example, \shogunclass{CStreamingDenseFeatures} offers a constructor to construct an instance from an object of type \shogunclass{CDenseFeatures} which then can be passed to  \shogunclass{CLinearTimeMMD}. If a streaming feature class for your desired data does not exist or does not offer an constructor to build from an object in memory, write to the mailing list.
+\textbf{Important:} The underlying parser of \shogunclass{CDenseFeatures} has to be started (or ensured that it is not needed) before \shogunclass{CLinearTimeMMD} computes anything. Otherwise, a deadlock might occur.
+
+After streaming data is passed to \shogunclass{CLinearTimeMMD}, all interfaces work as before -- with the difference that new data is taken from the stream in every call of \texttt{compute\_statistic} and related methods. Note that taking data from the stream one by one results in a very inefficient way of computing the statistic due to involved overhead in the framework. To avoid this, there is an optional constructor parameter to specify a blocksize (note there is a default value). This number specifies how many samples are taken from the stream at once. The statistic then is computed in bursts on these blocks. In principle, the blocksize should be as large as possible, however, the memory consumption increases linear in the number of samples per block.
+If set larger than $m$, all samples will be processed at once.
 
 \subsubsection{Bootstrapping}
 As for any two-sample test in \shogun{}, bootstrapping can be used to approximate the null distribution. This results in a consistent, but slow test. The number of samples to take is the only parameter. As a rule of thumb, use at least 250 samples.
-See \texttt{bootstrap\_null} in \shogunclass{CTwoSampleTestStatistic}. Note that this method is not really necessary since with the Gaussian approximation, a fast and consistent estimate of the null-distribution is available for the linear time MMD.
+See \texttt{bootstrap\_null} in \shogunclass{CLinearTimeMMD}.
+Note that since \shogunclass{CLinearTimeMMD} operates on streaming features, \emph{new} data is taken from the stream in every iteration. This is in contrast to the usual way of bootstrapping as described in algorithm \ref{alg:bootstrapping}, where data is permuted in every iteration.
+
+Also note that in general, bootstrapping is not really necessary since with the Gaussian approximation, a fast and consistent estimate of the null-distribution is available for the linear time MMD. However, to ensure that the Gaussian approximation is accurate, it should always be checked against bootstrapping at least once.
 
 \subsubsection{Gaussian Approximation}
-Since both the null- and the alternative distribution are Gaussians with equal variance (and different mean), it is possible to approximate the null-distribution by using a linear time estimate for this variance. An unbiased, linear time estimator for
+Since both the null- and the alternative distribution are Gaussian with equal variance (and different mean), it is possible to approximate the null-distribution by using a linear time estimate for this variance. An unbiased, linear time estimator for
 \begin{align*}
 \var[\mmd_l^2[\mathcal{F},X,Y]]
 \end{align*}
@@ -111,9 +124,9 @@ can simply be computed by computing the empirical variance of
 \begin{align*}
 k(x_{2i},x_{2i+1})+k(y_{2i},y_{2i+1})-k(x_{2i},y_{2i+1})-k(x_{2i+1},y_{2i}) \qquad (1\leq i\leq m_2)
 \end{align*}
-A normal distribution with this variance and zero mean can then be used as an approximation for the null-distribution. This results in a consistent test and is very fast. The approximation gets accurate from about $m=1000$.
+A normal distribution with this variance and zero mean can then be used as an approximation for the null-distribution. This results in a consistent test and is very fast. However, note that it is an approximation and its accuracy depends on the underlying data distributions. It is a good idea to compare to the bootstrapping approach first to determine an appropriate number of samples to use. This number is usually in the tens of thousands.
 
-To use that method for testing, use \texttt{set\_null\_approximation\_method(MMD1\_GAUSSIAN)}, to be found in \shogunclass{CLinearTimeMMD}.
+To use the method for testing, use \texttt{set\_null\_approximation\_method(MMD1\_GAUSSIAN)}, to be found in \shogunclass{CLinearTimeMMD}. Using the Gaussian approximation, the null distribution can be estimated on the fly while computing the test statistic. The method \texttt{compute\_statistic\_and\_variance} does exactly this (results written into parameter references). The \texttt{perform\_test} methods of \shogunclass{CTestStatistic} for performing a complete two-sample are overwritten to make use of this more efficient approach. Use these instead of computing statistic and p-value separately.
 
 \subsection{Precomputed Kernel Matrices for Quadratic Time MMD}
 \label{sec:quadratic_mmd_precomputed_kernel}
@@ -121,7 +134,7 @@ For all MMD-based two-sample-tests, elements of kernel matrices of sample data h
 
 In contrast, \shogunclass{CLinearTimeMMD} should not be used with \shogunclass{CCusotmKernel}s since it does not even need all elements -- so pointless computations would be made. Also, \shogunclass{CLinearTimeMMD} might be c
 
-\subsubsection{Kernel Selection}
+\subsection{Kernel Selection}
 \label{sec:statistical_tests-mmd-kernel_selection}
 Kernel selection for MMD-based two-sample tests is an ongoing subject of research. In the near future, recent results on this topic will be implemented into \shogun{}. In the meantime, a good heuristic to start with, when using a Gaussian kernel as implemented in \shogunclass{CGaussianKernel}, is to use the median distance in the underlying data as kernel bandwidth. This way, the kernel captures at least the scaling of underlying data. In many cases, this leads to usable first results, however, the method may badly fail if signal is hidden at another length scale than the one of the overall data. The method is mentioned in \citep[Appendix C]{Gretton2012}.
 
