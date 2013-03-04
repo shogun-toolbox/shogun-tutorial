@@ -5,7 +5,7 @@
 % A copy of the license is included in the section entitled "GNU
 % Free Documentation License".
 %
-% Written (C) 2012 Heiko Strathmann
+% Written (C) 2012-2013 Heiko Strathmann
 
 \section{Independence Testing with the HSIC Statistic}
 \label{sec:hsic_test}
@@ -70,7 +70,19 @@ Then, any threshold and p-value can be computed using the gamma distribution in 
 To use that method for testing, use \texttt{set\_null\_approximation\_method(HSIC\_GAMMA)}, to be found in \shogunclass{CHSIC}.
 
 \subsubsection{Kernel Selection}
-See section \ref{sec:statistical_tests-mmd-kernel_selection}. The same principle may be applied for HSIC-based tests. Note that since there is a kernel for each distribution, two kernel parameters have to be selected. Using the described median heuristic also leads to good results in some cases, as mentioned in \citep{Gretton2008d}.
+Kernel selection for HSIC-based tests is an ongoing subject of research. In the near future, recent results on this topic will be implemented into \shogun{}. In the meantime, a good heuristic to start with, when using a Gaussian kernel as implemented in \shogunclass{CGaussianKernel}, is to use the median distance in the underlying data as kernel bandwidth. This way, the kernel captures at least the scaling of underlying data. In many cases, this leads to usable first results, however, the method may badly fail if signal is hidden at another length scale than the one of the overall data. The method is mentioned in \citep[Appendix C]{Gretton2012}.
+
+In order to do this, note that  \shogun{}'s Gaussian kernel implementation uses a different parametrization as most other literature:
+\begin{align*}
+k(x,x')=\exp\left( \frac{||x-x'||_2^2}{\tau}\right)
+\end{align*}
+where $\tau$ is the width that is passed to the constructor of \shogunclass{CGaussianKernel}. In order to translate a median distance $d$ to this kernel, simply pass $\tau=d^2$.
+
+\shogun{} implements classes that can compute median distances. Create an instance of the class \shogunclass{CEulideanDistance}, call the method \texttt{distance\_matrix} to compute all pairwise distances of passed data. Then, use the method \texttt{matrix\_median} of  \shogunclass{CStatistics} in order to compute the median of all elements in the matrix. Store this distance and pass it to the Gaussian kernel as described above.
+
+Note that the median is a very stable statistic, therefore, it is not necessary to compute all pairwise distances. A subset of a few hundred points is sufficient. This can be done via setting a subset to the instance of \shogunclass{CFeatures} that holds the data. To do so, create a random index permutation via calling method \texttt{randperm\_vec} of class \shogunclass{CMath}, and only keep the $n$ first indices where $n$ is the number of distances that should be computed. Call \texttt{add\_subset} on the instance of \shogunclass{CFeatures} that holds the data and give the indices as parameter. Then, this instance can be passed to \shogunclass{CEulideanDistance} as described above. Distances will only be computed for specified indices. Once the distance matrix is computed, call \texttt{remove\_subset} to reset the original state of the data.
+
+The whole procedure is included in all python examples, including the graphical ones. Note that since there is a kernel for each distribution, two kernel parameters have to be selected. Using the described median heuristic also leads to good results in some cases, as mentioned in \citep{Gretton2008d}.
 
 \subsubsection{Example}
 There is a graphical python example which plots example data, alternative and null-distributions. See figure \ref{fig:statistical_testing-hsic}.

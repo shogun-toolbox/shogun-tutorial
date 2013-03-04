@@ -5,7 +5,7 @@
 % A copy of the license is included in the section entitled "GNU
 % Free Documentation License".
 %
-% Written (C) 2012 Heiko Strathmann
+% Written (C) 2012-2013 Heiko Strathmann
 
 \section{Two-Sample-Testing with the Maximum Mean Discrepancy}
 \label{sec:mmd_into}
@@ -134,24 +134,54 @@ For all MMD-based two-sample-tests, elements of kernel matrices of sample data h
 
 In contrast, \shogunclass{CLinearTimeMMD} should not be used with \shogunclass{CCusotmKernel}s since it does not even need all elements -- so pointless computations would be made. Also, \shogunclass{CLinearTimeMMD} might be c
 
-\subsection{Kernel Selection}
+\subsection{Kernel Selection for MMD}
 \label{sec:statistical_tests-mmd-kernel_selection}
-Kernel selection for MMD-based two-sample tests is an ongoing subject of research. In the near future, recent results on this topic will be implemented into \shogun{}. In the meantime, a good heuristic to start with, when using a Gaussian kernel as implemented in \shogunclass{CGaussianKernel}, is to use the median distance in the underlying data as kernel bandwidth. This way, the kernel captures at least the scaling of underlying data. In many cases, this leads to usable first results, however, the method may badly fail if signal is hidden at another length scale than the one of the overall data. The method is mentioned in \citep[Appendix C]{Gretton2012}.
 
-In order to do this, note that  \shogun{}'s Gaussian kernel implementation uses a different parametrization as most other literature:
+\shogun{}'s kernel selection methods for MMD based two-sample tests are all based around  \cite{Sriperumbudur2009, Gretton2012a}. For the \shogunclass{CLinearTimeMMD}, \cite{Gretton2012a} describes a way of selecting the \emph{optimal} kernel in the sense that the test's type II error is minimised. For the linear time MMD, this is the method of choice. It is done via maximising the MMD statistic divided by its standard deviation and it is possible for single kernels and also for convex combinations of them. For the \shogunclass{CQuadraticTimeMMD}, the best method in literature is choosing the kernel that maximised the MMD statistic. For convex combinations of kernels, this can be achieved via a $L2$ norm constraint. A detailed comparison of all methods on numerous datasets can be found in \cite{Strathmann2012}.
+
+MMD Kernel selection on \shogun{} always involves an implementation of the base class \shogunclass{CMMDKernelSelection}, which defines the interface for kernel selection. If combinations of kernel should be considered, there is a sub-class \shogunclass{CMMDKernelSelectionComb}. In addition, it involves setting up a number of baseline kernels $\mathcal{K}$ to choose from/combine in the form of a \shogunclass{CCombinedKernel}. All methods compute their results for a fixed set of these baseline kernels. We later give an example how to use these classes after providing a list of available methods.
+
+\paragraph{\shogunclass{CMMDKernelSelectionMedian}:} Selects from a set \shogunclass{CGaussianKernel} instances the one whose width parameter is closest to the median of the pairwise distances in the data. The median is computed on a certain number of points from each distribution that can be specified as a parameter. Since the median is a stable statistic, one does not have to compute all pairwise distances but rather just a few thousands. This method a useful (and fast) heuristic that in many cases gives a good hint on where to start looking for Gaussian kernel widths. It is for example described in \citep{Gretton2012}. Note that it may fail badly in selecting a good kernel for certain problems.
+
+\paragraph{\shogunclass{CMMDKernelSelectionMax}:} Selects from a set of arbitrary baseline kernels a single one that maximises the used MMD statistic -- more specific its estimate.
 \begin{align*}
-k(x,x')=\exp\left( \frac{||x-x'||_2^2}{\tau}\right)
+k^*=\argmax_{k\in\mathcal{K}} \hat \eta_k,
 \end{align*}
-where $\tau$ is the width that is passed to the constructor of \shogunclass{CGaussianKernel}. In order to translate a median distance $d$ to this kernel, simply pass $\tau=d^2$.
+where $\eta_k$ is an empirical MMD estimate for using a kernel $k$.
+This was first described in \cite{Sriperumbudur2009} and was empirically shown to perform better than the median heuristic above. However, it remains a heuristic that comes with no guarantees. Since MMD estimates can be computed in linear and quadratic time, this method works for both methods. However, for the linear time statistic, there exists a better method.
+ 
+\paragraph{\shogunclass{CMMDKernelSelectionOpt}:} Selects the optimal single kernel from a set of baseline kernels. This is done via maximising the ratio of the linear MMD statistic and its standard deviation.
+\begin{align*}
+k^*=\argmax_{k\in\mathcal{K}} \frac{\hat \eta_k}{\hat\sigma_k+\lambda},
+\end{align*}
+where $\eta_k$ is a linear time MMD estimate for using a kernel $k$ and $\hat\sigma_k$ is a linear time variance estimate of $\eta_k$ to which a small number $\lambda$ is added to prevent division by zero.
+These are estimated in a linear time way with the streaming framework that was described in section \ref{sec:mmd_linear}. Therefore, this method is only available for \shogunclass{CLinearTimeMMD}. Optimal here means that the resulting test's type II error is minimised for a fixed type I error. \emph{Important:} For this method to work, the kernel needs to be selected on \emph{different} data than the test is performed on. Otherwise, the method will produce wrong results.
+ 
+\paragraph{\shogunclass{CMMDKernelSelectionCombMaxL2}:} Selects a convex combination of kernels that maximises the MMD statistic. This is the multiple kernel analogous to \shogunclass{CMMDKernelSelectionMax}. This is done via solving the convex program
+\begin{align*}
+\boldsymbol{\beta}^*=\min_{\boldsymbol{\beta}} \{\boldsymbol{\beta}^T\boldsymbol{\beta}  :  \boldsymbol{\beta}^T\boldsymbol{\eta}=\mathbf{1}, \boldsymbol{\beta}\succeq 0\},
+\end{align*}
+where $\boldsymbol{\beta}$ is a vector of the resulting kernel weights and $\boldsymbol{\eta}$ is a vector of which each component contains a MMD estimate for a baseline kernel. See \citep{Gretton2012a} for details. Note that this method is unable to select a single kernel -- even when this would be optimal.
+Again, when using the linear time MMD, there are better methods available.
 
-\shogun{} implements classes that can compute median distances. Create an instance of the class \shogunclass{CEulideanDistance}, call the method \texttt{distance\_matrix} to compute all pairwise distances of passed data. Then, use the method \texttt{matrix\_median} of  \shogunclass{CStatistics} in order to compute the median of all elements in the matrix. Store this distance and pass it to the Gaussian kernel as described above.
+\paragraph{\shogunclass{CMMDKernelSelectionCombOpt}:} Selects a convex combination of kernels that maximises the MMD statistic divided by its covariance. This corresponds to \emph{optimal} kernel selection in the same sense as in class \shogunclass{CMMDKernelSelectionOpt} and is its multiple kernel analogous. The convex program to solve is
+\begin{align*}
+\boldsymbol{\beta}^*=\min_{\boldsymbol{\beta}} (\hat Q+\lambda I) \{\boldsymbol{\beta}^T\boldsymbol{\beta}  :  \boldsymbol{\beta}^T\boldsymbol{\eta}=\mathbf{1}, \boldsymbol{\beta}\succeq 0\},
+\end{align*}
+where again $\boldsymbol{\beta}$ is a vector of the resulting kernel weights and $\boldsymbol{\eta}$ is a vector of which each component contains a MMD estimate for a baseline kernel. The matrix $\hat Q$ is a linear time estimate of the covariance matrix of the vector $\boldsymbol{\eta}$ to whose diagonal a small number $\lambda$ is added to prevent division by zero. See \citep{Gretton2012a} for details. In contrast to \shogunclass{CMMDKernelSelectionCombMaxL2}, this method is able to select a single kernel when this gives a lower type II error than a combination. In this sense, it contains \shogunclass{CMMDKernelSelectionOpt}.
 
-Note that the median is a very stable statistic, therefore, it is not necessary to compute all pairwise distances. A subset of a few hundred points is sufficient. This can be done via setting a subset to the instance of \shogunclass{CFeatures} that holds the data. To do so, create a random index permutation via calling method \texttt{randperm\_vec} of class \shogunclass{CMath}, and only keep the $n$ first indices where $n$ is the number of distances that should be computed. Call \texttt{add\_subset} on the instance of \shogunclass{CFeatures} that holds the data and give the indices as parameter. Then, this instance can be passed to \shogunclass{CEulideanDistance} as described above. Distances will only be computed for specified indices. Once the distance matrix is computed, call \texttt{remove\_subset} to reset the original state of the data.
+\paragraph{Procedure}
+In order to use one of the above methods for kernel selection, one has to create a new instance of \shogunclass{CCombinedKernel} and use the method \texttt{append\_kernel} to append all desired baseline kernels to it. This combined kernel is then passed to the MMD class. Then, an object of any of the above kernel selection methods is created and the MMD instance is passed to it in the constructor. There are then multiple methods to call
+\begin{itemize}
+\item \texttt{compute\_measures} returns a vector kernel selection criteria if a single kernel selection method is used. It will return a vector of selected kernel weights if a combined kernel selection method is used. For \shogunclass{CMMDKernelSelectionMedian}, the method does throw an error.
 
-The whole procedure is included in all python examples, including the graphical ones.
+\item \texttt{select\_kernel} returns the selected kernel of the method. For single kernels this will be one of the baseline kernel instances. For the combined kernel case, this will be the underlying \shogunclass{CCombinedKernel} instance where the subkernel weights are set to the weights that were selected by the method. 
+\end{itemize}
+
+In order to utilise the selected kernel, it has to be passed to an MMD instance via \texttt{set\_kernel} or the constructor. See the examples for more details.
 
 \subsubsection{Examples}
-There are graphical python examples which plot example data, alternative and null-distributions. See figures \ref{fig:statistical_testing-quadratic_time_mmd} and \ref{fig:statistical_testing-linear_time_mmd} for a screenshot for quadratic and linear time MMD respectively.
+There are graphical python examples which plot example data, alternative and null-distributions. See figures \ref{fig:statistical_testing-quadratic_time_mmd} and \ref{fig:statistical_testing-linear_time_mmd} for a screenshot for quadratic and linear time MMD respectively. In addition there are examples for linear time and quadratic time MMD that illustrate how to estimate type I and type II errors rates, and how to use kernel selection methods.
 
 \begin{figure}\centering
 		\includegraphics{fig/statistical_testing/linear_time_mmd}
